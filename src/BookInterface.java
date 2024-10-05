@@ -1,6 +1,6 @@
 interface BookInterface {
-    default void lastSixBooks() {
-        // return last six books
+    default String lastSixBooks() {
+        return "";
     }
 
     double numberOfBooksPerGenre();
