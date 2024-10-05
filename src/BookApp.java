@@ -4,14 +4,15 @@
 
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class BookApp {
     public static void main(String[] args) {
-        PrintedBook book1 = new PrintedBook("Title1", "author1", "genre1", 10.0, 210);
-        PrintedBook book2 = new PrintedBook("Title1", "author1", "genre1", 50.0, 210);
+        PrintedBook book1 = new PrintedBook("Title1", "author1", "fiction", 10.0, 210);
+        PrintedBook book2 = new PrintedBook("Title1", "author1", "fiction", 50.0, 210);
 
-        AudioBook book3 = new AudioBook("Title2", "author2", "genre2", 20.0, 320.21);
-        AudioBook book4 = new AudioBook("Title2", "author2", "genre2", 40.0, 320.21);
+        AudioBook book3 = new AudioBook("Title2", "author2", "romance", 20.0, 320.21);
+        AudioBook book4 = new AudioBook("Title2", "author2", "nonfiction", 40.0, 320.21);
 
 
         //printed
@@ -33,6 +34,7 @@ public class BookApp {
             System.out.println(detail);
         }
 
-
+        // Genre count for both Printed and Audio books
+        BookAbstract.numberOfBooksPerGenre();
     }
 }

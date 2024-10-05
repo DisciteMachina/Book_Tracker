@@ -1,5 +1,7 @@
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AudioBook extends BookAbstract {
 
@@ -83,4 +85,12 @@ public class AudioBook extends BookAbstract {
         }
         return details;
     }
+
+    // Keeps track of types of genre
+    public static void numberOfBooksPerGenre(Map<String, Integer> genreCounts) {
+        for (AudioBook book : bookList) {
+            genreCounts.put(book.getGenre().toLowerCase(), genreCounts.getOrDefault(book.getGenre().toLowerCase(), 0) + 1);
+        }
+    }
+
 }

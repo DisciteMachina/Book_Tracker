@@ -1,9 +1,14 @@
+import java.util.Map;
+
 interface BookInterface {
     default String lastSixBooks() {
         return "";
     }
 
-    double numberOfBooksPerGenre();
+    static int numberOfBooksPerGenre(String genre) {
+        return 0;
+    }
+
     double getTotalCost();
 
 }
