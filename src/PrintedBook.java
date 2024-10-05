@@ -7,17 +7,47 @@ public class PrintedBook extends BookAbstract {
     private static final ArrayList<PrintedBook> bookList = new ArrayList<>();
     private static int totalPages;
 
+    private String title;
+    private String author;
+    private String genre;
+    private double cost;
+    private int pages;
+
     public PrintedBook(String title, String author, String genre, double cost, int pages) {
         super(title, author, genre, pages);
+
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.pages = pages;
         this.cost = pages * COST_PER_PAGE;
-        bookList.add(this);
+
         totalPages += pages;
+        bookList.add(this);
     }
 
+    // getters
     public double getCost() {
         return cost;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    // Returns the average amount of pages for all the printed books
     public static String averagePages() {
         DecimalFormat df = new DecimalFormat("#.00");
 
@@ -25,22 +55,28 @@ public class PrintedBook extends BookAbstract {
         if (bookList.isEmpty()) {
             return "0.0";
         }
-        
+
         double average = (double) totalPages / bookList.size();
         return df.format(average);
     }
 
-    public void lastThreePrintedBooks() {
+    // Returns the last three printed books added
+    public static ArrayList<String> lastThreePrintedBooks() {
         ArrayList<PrintedBook> lastThree = new ArrayList<>();
         int i = Math.max(0, bookList.size() - 3);
         for (int j = i; j < bookList.size(); j ++) {
             lastThree.add(bookList.get(j));
         }
-        getDetails(lastThree);
-    }
 
-    private void getDetails(ArrayList<PrintedBook> lastThree) {
-        String details = "Title: " + title;
+        ArrayList<String> details = new ArrayList<>();
+        for (PrintedBook book : lastThree) {
+            String detail = "Title: " + book.getTitle() +
+                    ", Author: " + book.getAuthor() +
+                    ", Genre: " + book.getGenre() +
+                    ", Pages: " + book.getPages() +
+                    ", Cost: $" + book.getCost();
+            details.add(detail);
+        }
+        return details;
     }
-
 }

@@ -2,7 +2,8 @@
 
 // For audio books: title, author, genre, cost, length
 
-import java.text.DecimalFormat;
+
+import java.util.ArrayList;
 
 public class BookApp {
     public static void main(String[] args) {
@@ -11,5 +12,10 @@ public class BookApp {
         PrintedBook book3 = new PrintedBook("Title3", "author3", "genre3", 30.0, 450);
 
         System.out.println("Average cost of all books: " + PrintedBook.averagePages());
+
+        ArrayList<String> details = PrintedBook.lastThreePrintedBooks();
+        for (String detail : details) {
+            System.out.println(detail);
+        }
     }
 }
