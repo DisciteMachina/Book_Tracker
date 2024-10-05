@@ -2,16 +2,16 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class AudioBook extends BookAbstract {
-    protected double COST_PER_MINUTE = 5.0;
 
+    protected static double COST_PER_MINUTE = 5.0;
     private static final ArrayList<AudioBook> bookList = new ArrayList<AudioBook>();
     private static double totalLength;
 
-    private String title;
-    private String author;
-    private String genre;
+    private final String title;
+    private final String author;
+    private final String genre;
     private double cost;
-    private double length;
+    private final double length;
 
 
     public AudioBook(String title, String author, String genre, double cost, double length) {
@@ -20,6 +20,7 @@ public class AudioBook extends BookAbstract {
         this.author = author;
         this.genre = genre;
         this.length = length;
+        this.cost = cost;
 
         totalLength += length;
         bookList.add(this);
@@ -46,6 +47,11 @@ public class AudioBook extends BookAbstract {
         return length;
     }
 
+    // Returns cost of all audiobooks
+    public static double totalCost() {
+        return totalLength * COST_PER_MINUTE;
+    }
+
     public static String averageLength() {
         DecimalFormat df = new DecimalFormat("#.00");
 
@@ -54,7 +60,7 @@ public class AudioBook extends BookAbstract {
             return "0.0";
         }
 
-        double average = (double) totalLength / bookList.size();
+        double average = totalLength / bookList.size();
         return df.format(average);
     }
 

@@ -2,25 +2,25 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class PrintedBook extends BookAbstract {
-    final double COST_PER_PAGE = 10.0;
 
+    static final double COST_PER_PAGE = 10.0;
     private static final ArrayList<PrintedBook> bookList = new ArrayList<>();
     private static int totalPages;
 
-    private String title;
-    private String author;
-    private String genre;
-    private double cost;
-    private int pages;
+
+    private final String title;
+    private final String author;
+    private final String genre;
+    private final double cost;
+    private static int pages;
 
     public PrintedBook(String title, String author, String genre, double cost, int pages) {
         super(title, author, genre, pages);
-
         this.title = title;
         this.author = author;
         this.genre = genre;
-        this.pages = pages;
-        this.cost = pages * COST_PER_PAGE;
+        PrintedBook.pages = pages;
+        this.cost = cost;
 
         totalPages += pages;
         bookList.add(this);
@@ -45,6 +45,11 @@ public class PrintedBook extends BookAbstract {
 
     public int getPages() {
         return pages;
+    }
+
+    // Returns cost of all printed books
+    public static double totalCost() {
+        return totalPages * COST_PER_PAGE;
     }
 
     // Returns the average amount of pages for all the printed books
