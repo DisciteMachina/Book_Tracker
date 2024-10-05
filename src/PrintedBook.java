@@ -26,7 +26,7 @@ public class PrintedBook extends BookAbstract {
         bookList.add(this);
     }
 
-    // getters
+    // Getters
     public double getCost() {
         return cost;
     }
@@ -49,7 +49,7 @@ public class PrintedBook extends BookAbstract {
 
     // Returns the average amount of pages for all the printed books
     public static String averagePages() {
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("#");
 
         // Avoid division by 0
         if (bookList.isEmpty()) {

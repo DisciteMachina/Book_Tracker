@@ -1,20 +1,80 @@
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
 public class AudioBook extends BookAbstract {
-    protected double length;
     protected double COST_PER_MINUTE = 5.0;
 
-    public AudioBook(String title, String author, String genre, double cost) {
-        super(title, author, genre, cost);
+    private static final ArrayList<AudioBook> bookList = new ArrayList<AudioBook>();
+    private static double totalLength;
+
+    private String title;
+    private String author;
+    private String genre;
+    private double cost;
+    private double length;
+
+
+    public AudioBook(String title, String author, String genre, double cost, double length) {
+        super(title, author, genre, length);
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.length = length;
+
+        totalLength += length;
+        bookList.add(this);
     }
 
+    // Getters
     public double getCost() {
-        return 0;
+        return cost;
     }
 
-    public double averageLength() {
-        return 0;
+    public String getTitle() {
+        return title;
     }
 
-    public String lastThreeAudioBooks() {
-        return "";
+    public String getGenre() {
+        return genre;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public static String averageLength() {
+        DecimalFormat df = new DecimalFormat("#.00");
+
+        // Avoid division by 0
+        if (bookList.isEmpty()) {
+            return "0.0";
+        }
+
+        double average = (double) totalLength / bookList.size();
+        return df.format(average);
+    }
+
+    // Returns the last three audiobooks added
+    public static ArrayList<String> lastThreeAudioBooks() {
+        ArrayList<AudioBook> lastThree = new ArrayList<>();
+        int i = Math.max(0, bookList.size() - 3);
+        for (int j = i; j < bookList.size(); j ++) {
+            lastThree.add(bookList.get(j));
+        }
+
+        ArrayList<String> details = new ArrayList<>();
+        for (AudioBook book : lastThree) {
+            String detail = "Title: " + book.getTitle() +
+                    ", Author: " + book.getAuthor() +
+                    ", Genre: " + book.getGenre() +
+                    ", Length: " + book.getLength() +
+                    ", Cost: $" + book.getCost();
+            details.add(detail);
+        }
+        return details;
     }
 }
