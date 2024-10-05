@@ -1,12 +1,14 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class AudioBook extends BookAbstract {
 
     protected static double COST_PER_MINUTE = 5.0;
-    private static final ArrayList<AudioBook> bookList = new ArrayList<AudioBook>();
+    private static ArrayList<AudioBook> bookList = new ArrayList<AudioBook>();
     private static double totalLength;
 
     private final String title;
@@ -26,6 +28,17 @@ public class AudioBook extends BookAbstract {
 
         totalLength += length;
         bookList.add(this);
+
+        writeBookToFile("AudioBook: " + title + ", " + author + ", " + genre + ", " + cost + ", " + length);
+    }
+
+    private void writeBookToFile(String bookDetails) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("book_log.txt", true))) {
+            writer.write(bookDetails);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Getters
@@ -48,6 +61,9 @@ public class AudioBook extends BookAbstract {
     public double getLength() {
         return length;
     }
+
+    //public static ArrayList<String> getAudioBooks() {
+    //}
 
     // Returns cost of all audiobooks
     public static double totalCost() {

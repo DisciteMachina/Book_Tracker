@@ -1,12 +1,14 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class PrintedBook extends BookAbstract {
 
     static final double COST_PER_PAGE = 10.0;
-    private static final ArrayList<PrintedBook> bookList = new ArrayList<>();
+    private static ArrayList<PrintedBook> bookList = new ArrayList<>();
     private static int totalPages;
 
 
@@ -26,6 +28,18 @@ public class PrintedBook extends BookAbstract {
 
         totalPages += pages;
         bookList.add(this);
+
+        writeBookToFile("PrintedBook: " + title + ", " + author + ", " + genre + ", " + cost + ", " + pages);
+
+    }
+
+    private void writeBookToFile(String bookDetails) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("book_log.txt", true))) {
+            writer.write(bookDetails);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Getters
@@ -48,6 +62,9 @@ public class PrintedBook extends BookAbstract {
     public int getPages() {
         return pages;
     }
+
+   // public static ArrayList<String> getPrintedBooks() {
+   // }
 
     // Returns cost of all printed books
     public static double totalCost() {
