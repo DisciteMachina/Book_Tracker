@@ -1,187 +1,46 @@
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        BookApp app = new BookApp();
+        List<BookDTO> allBooks = BookLogger.readBooksFromFile();
         Scanner input = new Scanner(System.in);
 
         while (true) {
-            System.out.println();
-            System.out.println("Book Tracker");
+            System.out.println("Book Manager");
             System.out.println("------------");
-            System.out.println("[1] Add Books");
-            System.out.println("[2] Manage Books");
-            System.out.println("[3] Exit");
+            System.out.println("Choose an option: ");
+            System.out.println("1. Add a book");
+            System.out.println("2. View all books");
+            System.out.println("3. Search for a book");
+            System.out.println("4. Exit");
 
-            int choice = input.nextInt();
+            int userChoice = input.nextInt(); // Assuming input is a Scanner
 
-            if (choice == 1) {
-                System.out.println("What kind of book?");
-                System.out.println("------------");
-                System.out.println("[1] Printed Book");
-                System.out.println("[2] Audiobook");
-                System.out.println("[3] Exit");
-                int bookType = input.nextInt();
-                input.nextLine();
+            switch (userChoice) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    System.out.println("Exiting the program...");
+                    break;
+            }
 
-                if (bookType == 1) {
-                    System.out.println("Enter book details.");
-                    System.out.println("------------");
-                    System.out.println("(Title, Author, Genre, Pages, Cost)");
-                    String bookInfo = input.nextLine();
-
-                    String[] parts = bookInfo.split(",");
-
-                    if (parts.length == 5) {
-                        String title = parts[0].trim();
-                        String author = parts[1].trim();
-                        String genre = parts[2].trim();
-
-                        boolean validInput = false;
-                        int pages = 0;
-                        double cost = 0;
-
-                        while (!validInput) {
-                            try {
-                                pages = Integer.parseInt(parts[3].trim());
-                                cost = Double.parseDouble(parts[4].trim());
-                                validInput = true;
-                            } catch (NumberFormatException e) {
-                                System.out.println("Invalid input for pages or cost. Please enter the details again.");
-                                System.out.println("(Title, Author, Genre, Pages, Cost)");
-                                bookInfo = input.nextLine();
-                                parts = bookInfo.split(",");
-                            }
-                        }
-
-                        String bookDetails = title + "," + author + "," + genre + "," + pages + "," + cost;
-
-                        if (BookLogger.checkLogged(bookDetails)) {
-                            BookLogger.writeBookToFile(bookDetails);
-                            System.out.println("Logged " + title + " By " + author);
-                        } else {
-                            System.out.println("Book already logged: " + title);
-                        }
-                    }
-
-                } else if (bookType == 2) {
-                    System.out.println("Enter book details.");
-                    System.out.println("------------");
-                    System.out.println("(Title, Author, Genre, Length, Cost)");
-                    String bookInfo = input.nextLine();
-
-                    String[] parts = bookInfo.split(",");
-
-                    if (parts.length == 5) {
-                        String title = parts[0].trim();
-                        String author = parts[1].trim();
-                        String genre = parts[2].trim();
-                        double length = Integer.parseInt(parts[3].trim());
-                        double cost = Double.parseDouble(parts[4].trim());
-
-                        String bookDetails = title + "," + author + "," + genre + "," + length + "," + cost;
-
-                        if (BookLogger.checkLogged(bookDetails)) {
-                            BookLogger.writeBookToFile(bookDetails);
-                        } else {
-                            System.out.println("Book already logged: " + title);
-                        }
-
-                    }
-                }
-                if (bookType == 3) {
-                    continue;
-                }
-
-            } else if (choice == 2) {
-                System.out.println("------------");
-                System.out.println("[1] Printed Books");
-                System.out.println("[2] Audiobooks");
-                System.out.println("[3] View All Books");
-                System.out.println("[4] Exit");
-                int typeBook = input.nextInt();
-                input.nextLine();
-
-                if (typeBook == 1) {
-                    System.out.println("------------");
-                    System.out.println("[1] View All Printed Books");
-                    System.out.println("[2] Last Three Added Books");
-                    System.out.println("[3] Calculate Average Pages");
-                    System.out.println("[4] Calculate Total Cost");
-                    System.out.println("[5] Exit");
-
-                    int bookInfo = input.nextInt();
-                    input.nextLine();
-
-                    if (bookInfo == 1) {
-                        ArrayList<String> allBooks = PrintedBook.allPrintedBooks();
-                        for (String detail : allBooks) {
-                            System.out.println(detail);
-                        }
-                    }
-
-                    if (bookInfo == 2) {
-                        ArrayList<String> pBooks = PrintedBook.lastThreePrintedBooks();
-                        for (String pDetail : pBooks) {
-                            System.out.println(pDetail);
-                        }
-                    }
-
-
-                    if (bookInfo == 3) {
-                        System.out.println(PrintedBook.averagePages());
-                    }
-
-                    if (bookInfo == 4) {
-                        System.out.println(PrintedBook.totalCost());
-                    }
-
-                    if (bookInfo == 5) {
-                        continue;
-                    }
-                }
-
-                if (typeBook == 2) {
-                }
-
-                if (typeBook == 3) {
-                    System.out.println("------------");
-                    System.out.println("[1] View All Book Info");
-                    System.out.println("[2] View All Book Genres");
-                    System.out.println("[3] View Total Book Cost ");
-                    System.out.println("[4] Exit");
-                    int bookInfo = input.nextInt();
-                    input.nextLine();
-
-                    if (bookInfo == 1) {
-
-                    }
-
-                    if (bookInfo == 2) {
-                        app.numberOfBooksPerGenre();
-                    }
-
-                    if (bookInfo == 3) {
-                        System.out.println(BookAbstract.getTotalCost());
-                    }
-
-                    if (bookInfo == 4) {
-                        continue;
-                    }
-                }
-
-                if (typeBook == 4) {
-                    continue;
-                }
-
-            } else if (choice == 3) {
+            if (userChoice == 4) {
                 break;
             }
         }
     }
 }
 
+/*
+for (BookDTO book : allBooks) {
+        if (book.getType().equalsIgnoreCase("PRINTED")) {
+        System.out.println(book);
+            }
+                    }
 
-
-
+ */

@@ -1,7 +1,8 @@
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class BookLogger {
-
     private static final String FILE_NAME = "book_log.txt";
 
     public static void writeBookToFile(String bookDetails) {
@@ -19,7 +20,7 @@ public class BookLogger {
     }
 
     public static boolean checkLogged(String bookDetails) {
-        String title = bookDetails.split(",")[0].trim(); // Get the title (the first part)
+        String title = bookDetails.split(",")[1].trim(); // Get the title (the first part)
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
@@ -34,6 +35,51 @@ public class BookLogger {
         }
         return true;
     }
+
+    public static List<BookDTO> readBooksFromFile() {
+        List<BookDTO> books = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                BookDTO book = createBookFromLine(line);
+                books.add(book);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return books;
+    }
+
+    // Method to create a BookDTO from a line in the file
+    private static BookDTO createBookFromLine(String line) {
+        String[] parts = line.split(",");
+
+        String type = parts[0].trim(); // Should be "PRINTED" or "AUDIO"
+        String title = parts[1].trim();
+        String author = parts[2].trim();
+        String genre = parts[3].trim();
+
+        // Check the type and appropriately assign pages or length
+        int pages = 0;
+        double length = 0.0;
+        double cost;
+
+        if (type.equalsIgnoreCase("PRINTED")) {
+            pages = Integer.parseInt(parts[4].trim()); // Pages for printed books
+            cost = Double.parseDouble(parts[5].trim()); // Cost is the next value
+            return new BookDTO(type, title, author, genre, cost, pages);
+        } else if (type.equalsIgnoreCase("AUDIO")) {
+            length = Double.parseDouble(parts[4].trim()); // Length for audio books
+            cost = Double.parseDouble(parts[5].trim()); // Cost is the next value
+            return new BookDTO(type, title, author, genre, cost, length);
+
+        } else {
+            throw new IllegalArgumentException("Invalid book type: " + type);
+        }
+    }
+
 
 
 }
