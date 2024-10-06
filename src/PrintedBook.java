@@ -6,9 +6,6 @@ import java.util.HashMap;
 
 public class PrintedBook extends BookAbstract {
     static final double COST_PER_PAGE = 10.0;
-    private static ArrayList<PrintedBook> bookList = new ArrayList<>();
-
-    private static int totalPages;
 
     private final String title;
     private final String author;
@@ -17,31 +14,16 @@ public class PrintedBook extends BookAbstract {
 
 
     public PrintedBook(String title, String author, String genre, double cost, int pages) {
-        super(title, author, genre, pages);
         this.title = title;
         this.author = author;
         this.genre = genre;
         this.cost = cost;
 
-        bookList.add(this);
-        BookLogger.writeBookToFile(title + ", " + author + ", " + genre + ", " + pages + ", " + cost);
-
+        BookLogger.writeBookToFile("PRINTED," + title + ", " + author + ", " + genre + ", " + pages + ", " + cost + "\n");
     }
 
     public double getCost() {
         return cost;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public String getAuthor() {
-        return author;
     }
 
     public static double totalCost() {
@@ -144,8 +126,9 @@ public class PrintedBook extends BookAbstract {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
 
-                if (parts.length == 6 && parts[0].trim().equals("PRINTED,")) {
+                if (parts.length == 6 && parts[0].trim().equals("PRINTED")) {
                     String genre = parts[3].trim();
+                    System.out.println(parts[3]);
                     map.put(genre, map.getOrDefault(genre, 0) + 1);
                 }
             }

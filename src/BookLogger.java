@@ -9,7 +9,6 @@ public class BookLogger {
         if (checkLogged(bookDetails)) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
                 writer.write(bookDetails);
-                writer.newLine();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -79,8 +78,5 @@ public class BookLogger {
             throw new IllegalArgumentException("Invalid book type: " + type);
         }
     }
-
-
-
 }
 
