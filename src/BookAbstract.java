@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +20,15 @@ abstract class BookAbstract implements BookInterface {
     public static void numberOfBooksPerGenre() {
         Map<String, Integer> genreCounts = new HashMap<>();
 
-        PrintedBook.numberOfBooksPerGenre(genreCounts);
-        AudioBook.numberOfBooksPerGenre(genreCounts);
+        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",", 5);
+                genreCounts.put(parts[2].toLowerCase(), genreCounts.getOrDefault(parts[2].toLowerCase(), 0) + 1);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         for (Map.Entry<String, Integer> entry : genreCounts.entrySet()) {
             System.out.println("Genre: " + entry.getKey() + ", Count: " + entry.getValue());

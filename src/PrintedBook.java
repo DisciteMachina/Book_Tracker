@@ -49,7 +49,6 @@ public class PrintedBook extends BookAbstract {
 
     public static double totalCost() {
         int totalPages = 0;
-        final double COST_PER_PAGE = 0.10;
 
         try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
             String line;
@@ -94,7 +93,7 @@ public class PrintedBook extends BookAbstract {
         System.out.println();
         System.out.println("PRINTED BOOKS");
         ArrayList<String> lastThree = new ArrayList<>();
-        ArrayList<String> detailedBooks = new ArrayList<>();
+        ArrayList<String> bookList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
             String line;
@@ -110,22 +109,20 @@ public class PrintedBook extends BookAbstract {
                             "[Genre]: " + parts[2].trim() + "\n" +
                             "[Pages]: " + parts[3].trim() + "\n" +
                             "[Cost]: $" + parts[4].trim() + "\n";
-                    detailedBooks.add(detail);
-                } else {
-                    System.out.println("Invalid book entry format: " + line);
+                    bookList.add(detail);
                 }
             }
         } catch (IOException e) {
             System.out.println("Something went wrong");
             e.printStackTrace();
         }
-        return detailedBooks;
+        return bookList;
     }
 
     public static ArrayList<String> allPrintedBooks() {
         System.out.println();
         System.out.println("PRINTED BOOKS");
-        ArrayList<String> detailedBooks = new ArrayList<>();
+        ArrayList<String> bookList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -136,7 +133,7 @@ public class PrintedBook extends BookAbstract {
                             "[Genre]: " + parts[2].trim() + "\n" +
                             "[Pages]: " + parts[3].trim() + "\n" +
                             "[Cost]: $" + parts[4].trim() + "\n";
-                    detailedBooks.add(detail);
+                    bookList.add(detail);
                 } else {
                     System.out.println("Invalid book entry format: " + line);
                 }
@@ -145,12 +142,15 @@ public class PrintedBook extends BookAbstract {
             System.out.println("Something went wrong");
             e.printStackTrace();
         }
-        return detailedBooks;
+        return bookList;
     }
 
-    public static void numberOfBooksPerGenre(Map<String, Integer> genreCounts) {
+   /* public static void numberOfBooksPerGenre(Map<String, Integer> genreCounts) {
+
         for (PrintedBook book : bookList) {
             genreCounts.put(book.getGenre().toLowerCase(), genreCounts.getOrDefault(book.getGenre().toLowerCase(), 0) + 1);
         }
     }
+
+    */
 }

@@ -115,11 +115,4 @@ public class AudioBook extends BookAbstract {
         }
         return detailedBooks;
     }
-
-    public static void numberOfBooksPerGenre(Map<String, Integer> genreCounts) {
-        for (AudioBook book : bookList) {
-            genreCounts.put(book.getGenre().toLowerCase(), genreCounts.getOrDefault(book.getGenre().toLowerCase(), 0) + 1);
-        }
-    }
-
 }

@@ -144,6 +144,17 @@ public class BookApp {
                 }
 
                 if (typeBook == 3) {
+                    System.out.println("[1] View All Book Info");
+                    System.out.println("[2] View All Book Genres");
+                    int bookInfo = input.nextInt();
+
+                    if (bookInfo == 1) {
+
+                    }
+
+                    if (bookInfo == 2) {
+                        BookAbstract.numberOfBooksPerGenre();
+                    }
                 }
 
                 if (typeBook == 4) {
