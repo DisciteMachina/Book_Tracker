@@ -2,45 +2,31 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-interface BookInterface {
+public interface BookInterface {
 
-    static String lastSixBooks() {
-        ArrayList<String> lastSixBooks = getLastSixBooksFromLog();
-        StringBuilder sb = new StringBuilder("Last Six Book Titles:\n");
+    default ArrayList<String> getLastSixBooks() {
+        ArrayList<String> bookList = new ArrayList<>();
 
-        for (String title : lastSixBooks) {
-            sb.append(title).append("\n");
-        }
-
-        return sb.toString();
-    }
-
-    static ArrayList<String> getLastSixBooksFromLog() {
-        ArrayList<String> lastSixBooks = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
-            ArrayList<String> allBooks = new ArrayList<>();
             String line;
-
             while ((line = reader.readLine()) != null) {
-                allBooks.add(line);
-            }
-
-            int startIndex = Math.max(0, allBooks.size() - 6);
-            for (int i = startIndex; i < allBooks.size(); i++) {
-                String title = allBooks.get(i).split(",")[0];
-                lastSixBooks.add(title.trim());
+                String[] parts = line.split(",");
+                if (parts.length == 6) {
+                    String detail = "[Title]: " + parts[1].trim() + "\n" +
+                            "[Author]: " + parts[2].trim() + "\n" +
+                            "[Genre]: " + parts[3].trim() + "\n" +
+                            "[Pages]: " + parts[4].trim() + "\n" +
+                            "[Cost]: $" + parts[5].trim() + "\n";
+                    bookList.add(detail);
+                }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return lastSixBooks;
+        return bookList;
     }
 
-    void numberOfBooksPerGenre(String genre);
-
-    static double getTotalCost() {
-        return BookAbstract.getTotalCost();
-    }
+    public HashMap<String, Integer> numberOfBooksPerGenre();
 }

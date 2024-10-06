@@ -1,8 +1,8 @@
 import java.util.ArrayList;
-import java.util.Map;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class PrintedBook extends BookAbstract {
     static final double COST_PER_PAGE = 10.0;
@@ -14,7 +14,7 @@ public class PrintedBook extends BookAbstract {
     private final String author;
     private final String genre;
     private final double cost;
-    private static int pages;
+
 
     public PrintedBook(String title, String author, String genre, double cost, int pages) {
         super(title, author, genre, pages);
@@ -22,11 +22,8 @@ public class PrintedBook extends BookAbstract {
         this.author = author;
         this.genre = genre;
         this.cost = cost;
-        PrintedBook.pages = pages;
 
-        totalPages += pages;
         bookList.add(this);
-
         BookLogger.writeBookToFile(title + ", " + author + ", " + genre + ", " + pages + ", " + cost);
 
     }
@@ -54,13 +51,11 @@ public class PrintedBook extends BookAbstract {
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println("Line: " + line);
-                String[] parts = line.split(",", 5);
+                String[] parts = line.split(",", 6);
                 System.out.println("Parts count: " + parts.length);
-                if (parts.length >= 4) { // Removing this completely breaks it. I have no idea why
+                if (parts.length >= 4) {
                     int page = Integer.parseInt(parts[3].trim());
                     totalPages += page;
-                } else {
-                    System.out.println("Malformed line: " + line);
                 }
             }
         } catch (IOException e) {
@@ -72,19 +67,18 @@ public class PrintedBook extends BookAbstract {
 
     public static int averagePages() {
         int amountOfBooks = 0;
+        int totalPages = 0;
 
         try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",", 5);
-                int page = Integer.parseInt(parts[3].trim());
+                String[] parts = line.split(",");
+                int page = Integer.parseInt(parts[4].trim());
                 totalPages += page;
                 amountOfBooks ++;
             }
-
         } catch (IOException e) {
-            System.out.println("Something went wrong");
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return totalPages / amountOfBooks;
     }
@@ -102,8 +96,8 @@ public class PrintedBook extends BookAbstract {
             }
             int i = Math.max(0, lastThree.size() - 3);
             for (int j = i; j < lastThree.size(); j ++) {
-                String[] parts = lastThree.get(j).split(",", 5);
-                if (parts.length == 5) {
+                String[] parts = lastThree.get(j).split(",");
+                if (parts.length == 6) {
                     String detail = "[Title]: " + parts[0].trim() + "\n" +
                             "[Author]: " + parts[1].trim() + "\n" +
                             "[Genre]: " + parts[2].trim() + "\n" +
@@ -113,8 +107,7 @@ public class PrintedBook extends BookAbstract {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Something went wrong");
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return bookList;
     }
@@ -122,35 +115,43 @@ public class PrintedBook extends BookAbstract {
     public static ArrayList<String> allPrintedBooks() {
         System.out.println();
         System.out.println("PRINTED BOOKS");
+
         ArrayList<String> bookList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",", 5);
-                if (parts.length == 5) {
-                    String detail = "[Title]: " + parts[0].trim() + "\n" +
-                            "[Author]: " + parts[1].trim() + "\n" +
-                            "[Genre]: " + parts[2].trim() + "\n" +
-                            "[Pages]: " + parts[3].trim() + "\n" +
-                            "[Cost]: $" + parts[4].trim() + "\n";
+                String[] parts = line.split(",");
+                if (parts.length == 6 && parts[0].trim().equals("PRINTED,")) {
+                    String detail = "[Title]: " + parts[1].trim() + "\n" +
+                            "[Author]: " + parts[2].trim() + "\n" +
+                            "[Genre]: " + parts[3].trim() + "\n" +
+                            "[Pages]: " + parts[4].trim() + "\n" +
+                            "[Cost]: $" + parts[5].trim() + "\n";
                     bookList.add(detail);
-                } else {
-                    System.out.println("Invalid book entry format: " + line);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Something went wrong");
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return bookList;
     }
 
-   /* public static void numberOfBooksPerGenre(Map<String, Integer> genreCounts) {
+    public static HashMap<String, Integer> printedGenreCount() {
+        HashMap<String, Integer> map = new HashMap<>();
 
-        for (PrintedBook book : bookList) {
-            genreCounts.put(book.getGenre().toLowerCase(), genreCounts.getOrDefault(book.getGenre().toLowerCase(), 0) + 1);
+        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                if (parts.length == 6 && parts[0].trim().equals("PRINTED,")) {
+                    String genre = parts[3].trim();
+                    map.put(genre, map.getOrDefault(genre, 0) + 1);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        return map;
     }
-
-    */
 }

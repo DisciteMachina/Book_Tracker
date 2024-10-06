@@ -3,7 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashMap;
 
 public class AudioBook extends BookAbstract {
 
@@ -29,7 +29,7 @@ public class AudioBook extends BookAbstract {
         totalLength += length;
         bookList.add(this);
 
-        BookLogger.writeBookToFile(title + ", " + author + ", " + genre + ", " + length + ", " + cost);
+        BookLogger.writeBookToFile("AUDIO," + title + ", " + author + ", " + genre + ", " + length + ", " + cost);
     }
 
     public double getCost() {
@@ -76,7 +76,7 @@ public class AudioBook extends BookAbstract {
         ArrayList<AudioBook> lastThree = new ArrayList<>();
 
         int i = Math.max(0, bookList.size() - 3);
-        for (int j = i; j < bookList.size(); j ++) {
+        for (int j = i; j < bookList.size(); j++) {
             lastThree.add(bookList.get(j));
         }
 
@@ -98,21 +98,37 @@ public class AudioBook extends BookAbstract {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 5) {
-                    String detail = "[Title]: " + parts[0].trim() + "\n" +
-                            ", [Author]: " + parts[1].trim() + "\n" +
-                            ", [Genre]: " + parts[2].trim() + "\n" +
-                            ", [Length]: " + parts[3].trim() + "\n" +
-                            ", [Cost]: $" + parts[4].trim() + "\n";
+                if (parts.length >= 5 && parts[0].trim().equals("AUDIO")) {
+                    String detail = "[Title]: " + parts[1].trim() + "\n" +
+                            "[Author]: " + parts[2].trim() + "\n" +
+                            "[Genre]: " + parts[3].trim() + "\n" +
+                            "[Length]: " + parts[4].trim() + "\n" +
+                            "[Cost]: $" + parts[45].trim() + "\n";
                     detailedBooks.add(detail);
-                } else {
-                    System.out.println("Invalid book entry format: " + line);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Something went wrong");
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return detailedBooks;
+    }
+
+    public static HashMap<String, Integer> audioGenreCount() {
+        HashMap<String, Integer> map = new HashMap<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                if (parts.length == 6 && parts[0].trim().equals("AUDIO,")) {
+                    String genre = parts[3].trim();
+                    map.put(genre, map.getOrDefault(genre, 0) + 1);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return map;
     }
 }
