@@ -35,7 +35,7 @@ abstract class BookAbstract implements BookInterface {
         }
     }
 
-    public double getTotalCost() {
+    public static double getTotalCost() {
         return PrintedBook.totalCost() + AudioBook.totalCost();
     }
 

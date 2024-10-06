@@ -38,9 +38,9 @@ interface BookInterface {
         return lastSixBooks;
     }
 
-    static int numberOfBooksPerGenre(String genre) {
-        return 0;
-    }
+    void numberOfBooksPerGenre(String genre);
 
-    double getTotalCost();
+    static double getTotalCost() {
+        return BookAbstract.getTotalCost();
+    }
 }

@@ -63,6 +63,7 @@ public class BookApp {
                             System.out.println("Book already logged: " + title);
                         }
                     }
+
                 } else if (bookType == 2) {
                     System.out.println("Enter book details.");
                     System.out.println("------------");
@@ -144,9 +145,13 @@ public class BookApp {
                 }
 
                 if (typeBook == 3) {
+                    System.out.println("------------");
                     System.out.println("[1] View All Book Info");
                     System.out.println("[2] View All Book Genres");
+                    System.out.println("[3] View Total Book Cost ");
+                    System.out.println("[4] Exit");
                     int bookInfo = input.nextInt();
+                    input.nextLine();
 
                     if (bookInfo == 1) {
 
@@ -154,6 +159,14 @@ public class BookApp {
 
                     if (bookInfo == 2) {
                         BookAbstract.numberOfBooksPerGenre();
+                    }
+
+                    if (bookInfo == 3) {
+                        System.out.println(BookAbstract.getTotalCost());
+                    }
+
+                    if (bookInfo == 4) {
+                        continue;
                     }
                 }
 
@@ -165,28 +178,9 @@ public class BookApp {
                 break;
             }
         }
-
-
-        ArrayList<String> pBooks = PrintedBook.lastThreePrintedBooks();
-        for (String pDetail : pBooks) {
-            System.out.println(pDetail);
-        }
-
-
-        ArrayList<String> aBooks = AudioBook.lastThreeAudioBooks();
-        for (String aDetail : aBooks) {
-            System.out.println(aDetail);
-        }
     }
 }
 
-                // Genre count for both Printed and Audio books
-                // BookAbstract.numberOfBooksPerGenre();
 
-                //  System.out.println(BookInterface.lastSixBooks());
-
-                // GUI
-                //  BookGUI window = new BookGUI();
-                //  window.setVisible(true);
 
 
