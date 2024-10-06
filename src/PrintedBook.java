@@ -29,17 +29,8 @@ public class PrintedBook extends BookAbstract {
         totalPages += pages;
         bookList.add(this);
 
-        writeBookToFile("[PrintedBook] " + title + ", " + author + ", " + genre + ", " + cost + ", " + pages);
+        BookLogger.writeBookToFile(title + ", " + author + ", " + genre + ", " + pages + ", " + cost);
 
-    }
-
-    private void writeBookToFile(String bookDetails) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("book_log.txt", true))) {
-            writer.write(bookDetails);
-            writer.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public double getCost() {

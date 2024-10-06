@@ -29,16 +29,7 @@ public class AudioBook extends BookAbstract {
         totalLength += length;
         bookList.add(this);
 
-        writeBookToFile("[AudioBook] " + title + ", " + author + ", " + genre + ", " + cost + ", " + length);
-    }
-
-    private void writeBookToFile(String bookDetails) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("book_log.txt", true))) {
-            writer.write(bookDetails);
-            writer.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        BookLogger.writeBookToFile(title + ", " + author + ", " + genre + ", " + length + ", " + cost);
     }
 
     public double getCost() {

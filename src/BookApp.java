@@ -22,12 +22,12 @@ public class BookApp {
         }*/
 
         // Genre count for both Printed and Audio books
-        BookAbstract.numberOfBooksPerGenre();
+       // BookAbstract.numberOfBooksPerGenre();
 
-        System.out.println(BookInterface.lastSixBooks());
+      //  System.out.println(BookInterface.lastSixBooks());
 
         // GUI
-        BookGUI window = new BookGUI();
-        window.setVisible(true);
+      //  BookGUI window = new BookGUI();
+      //  window.setVisible(true);
     }
 }

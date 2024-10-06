@@ -48,7 +48,7 @@ class BookGUI extends JFrame {
                 JTextField bookTitleField = new JTextField(20);
 
                 JPanel inputPanel = new JPanel();
-                inputPanel.add(new JLabel("Enter the title of the book:"));
+                inputPanel.add(new JLabel("Enter book details, (title, author, genre, cost, pages"));
                 inputPanel.add(bookTitleField);
 
                 int result = JOptionPane.showConfirmDialog(null, inputPanel, "Add Book", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, inputIcon);
