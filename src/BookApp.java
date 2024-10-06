@@ -3,20 +3,6 @@ import java.util.Scanner;
 
 public class BookApp {
     public static void main(String[] args) {
-
-        /*
-        PrintedBook a = new PrintedBook("Way Of Kings", "Brandon Sanderson", "Fantasy", 8.99, 1001);
-        PrintedBook b = new PrintedBook("Crime and Punishment", "Dostoevsky", "Psychological Thriller", 6.51, 492);
-        PrintedBook c = new PrintedBook("Metamorphosis", "Franz Kafka", "Fiction", 5.00, 70);
-        PrintedBook d = new PrintedBook("The Fellowship of the Ring", "J.R.R Tolkien", "Fantasy", 5.84, 423);
-        PrintedBook e = new PrintedBook("Frankenstein", "Mary Shelley", "Horror", 6.59, 280);
-
-        AudioBook f = new AudioBook("The World as Will and Representation", "Arthur Schopenhauer", "Philosophy", 5.00, 1226);
-        AudioBook g = new AudioBook("The Last Olympian", "Rick Riordan", "Fantasy", 9.00, 660);
-
-         */
-
-
         Scanner input = new Scanner(System.in);
 
         while (true) {
@@ -50,12 +36,29 @@ public class BookApp {
                         String title = parts[0].trim();
                         String author = parts[1].trim();
                         String genre = parts[2].trim();
-                        int pages = Integer.parseInt(parts[3].trim());
-                        double cost = Double.parseDouble(parts[4].trim());
+
+                        boolean validInput = false;
+                        int pages = 0;
+                        double cost = 0;
+
+                        while (!validInput) {
+                            try {
+                                pages = Integer.parseInt(parts[3].trim());
+                                cost = Double.parseDouble(parts[4].trim());
+                                validInput = true;
+                            } catch (NumberFormatException e) {
+                                System.out.println("Invalid input for pages or cost. Please enter the details again.");
+                                System.out.println("(Title, Author, Genre, Pages, Cost)");
+                                bookInfo = input.nextLine();
+                                parts = bookInfo.split(",");
+                            }
+                        }
 
                         String bookDetails = title + "," + author + "," + genre + "," + pages + "," + cost;
+
                         if (BookLogger.checkLogged(bookDetails)) {
                             BookLogger.writeBookToFile(bookDetails);
+                            System.out.println("Logged " + title + " By " + author);
                         } else {
                             System.out.println("Book already logged: " + title);
                         }

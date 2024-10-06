@@ -1,4 +1,3 @@
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.io.BufferedReader;
@@ -6,11 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class PrintedBook extends BookAbstract {
-
     static final double COST_PER_PAGE = 10.0;
     private static ArrayList<PrintedBook> bookList = new ArrayList<>();
-    private static int totalPages;
 
+    private static int totalPages;
 
     private final String title;
     private final String author;
@@ -49,24 +47,47 @@ public class PrintedBook extends BookAbstract {
         return author;
     }
 
-    public int getPages() {
-        return pages;
-    }
-
     public static double totalCost() {
+        int totalPages = 0;
+        final double COST_PER_PAGE = 0.10;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println("Line: " + line);
+                String[] parts = line.split(",", 5);
+                System.out.println("Parts count: " + parts.length);
+                if (parts.length >= 4) { // Removing this completely breaks it. I have no idea why
+                    int page = Integer.parseInt(parts[3].trim());
+                    totalPages += page;
+                } else {
+                    System.out.println("Malformed line: " + line);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return totalPages * COST_PER_PAGE;
     }
 
-    public static String averagePages() {
-        DecimalFormat df = new DecimalFormat("#");
 
-        // Avoid division by 0
-        if (bookList.isEmpty()) {
-            return "0.0";
+    public static int averagePages() {
+        int amountOfBooks = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",", 5);
+                int page = Integer.parseInt(parts[3].trim());
+                totalPages += page;
+                amountOfBooks ++;
+            }
+
+        } catch (IOException e) {
+            System.out.println("Something went wrong");
+            e.printStackTrace();
         }
-
-        double average = (double) totalPages / bookList.size();
-        return df.format(average);
+        return totalPages / amountOfBooks;
     }
 
     public static ArrayList<String> lastThreePrintedBooks() {
@@ -82,7 +103,7 @@ public class PrintedBook extends BookAbstract {
             }
             int i = Math.max(0, lastThree.size() - 3);
             for (int j = i; j < lastThree.size(); j ++) {
-                String[] parts = lastThree.get(j).split(",");
+                String[] parts = lastThree.get(j).split(",", 5);
                 if (parts.length == 5) {
                     String detail = "[Title]: " + parts[0].trim() + "\n" +
                             "[Author]: " + parts[1].trim() + "\n" +
@@ -108,7 +129,7 @@ public class PrintedBook extends BookAbstract {
         try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
+                String[] parts = line.split(",", 5);
                 if (parts.length == 5) {
                     String detail = "[Title]: " + parts[0].trim() + "\n" +
                             "[Author]: " + parts[1].trim() + "\n" +
