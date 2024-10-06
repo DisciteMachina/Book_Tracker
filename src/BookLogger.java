@@ -13,7 +13,8 @@ public class BookLogger {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Book already logged: " + bookDetails);
+            //System.out.println("Book already logged: " + bookDetails);
+            System.out.println();
         }
     }
 

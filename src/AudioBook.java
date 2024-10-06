@@ -1,6 +1,3 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
@@ -14,7 +11,7 @@ public class AudioBook extends BookAbstract {
     private final String title;
     private final String author;
     private final String genre;
-    private double cost;
+    private final double cost;
     private final double length;
 
 
@@ -52,9 +49,6 @@ public class AudioBook extends BookAbstract {
         return length;
     }
 
-    //public static ArrayList<String> getAudioBooks() {
-    //}
-
     // Returns cost of all audiobooks
     public static double totalCost() {
         return totalLength * COST_PER_MINUTE;
@@ -74,6 +68,8 @@ public class AudioBook extends BookAbstract {
 
     // Returns the last three audiobooks added
     public static ArrayList<String> lastThreeAudioBooks() {
+        System.out.println();
+        System.out.println("AUDIOBOOKS");
         ArrayList<AudioBook> lastThree = new ArrayList<>();
         int i = Math.max(0, bookList.size() - 3);
         for (int j = i; j < bookList.size(); j ++) {
@@ -82,17 +78,16 @@ public class AudioBook extends BookAbstract {
 
         ArrayList<String> details = new ArrayList<>();
         for (AudioBook book : lastThree) {
-            String detail = "Title: " + book.getTitle() +
-                    ", Author: " + book.getAuthor() +
-                    ", Genre: " + book.getGenre() +
-                    ", Length: " + book.getLength() +
-                    ", Cost: $" + book.getCost();
+            String detail = "[Title]: " + book.getTitle() +
+                    ", [Author]: " + book.getAuthor() +
+                    ", [Genre]: " + book.getGenre() +
+                    ", [Length]: " + book.getLength() +
+                    ", [Cost]: $" + book.getCost();
             details.add(detail);
         }
         return details;
     }
 
-    // Keeps track of types of genre
     public static void numberOfBooksPerGenre(Map<String, Integer> genreCounts) {
         for (AudioBook book : bookList) {
             genreCounts.put(book.getGenre().toLowerCase(), genreCounts.getOrDefault(book.getGenre().toLowerCase(), 0) + 1);

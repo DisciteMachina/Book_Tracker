@@ -1,6 +1,3 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
@@ -71,6 +68,8 @@ public class PrintedBook extends BookAbstract {
 
 
     public static ArrayList<String> lastThreePrintedBooks() {
+        System.out.println();
+        System.out.println("PRINTED BOOKS");
         ArrayList<PrintedBook> lastThree = new ArrayList<>();
         int i = Math.max(0, bookList.size() - 3);
         for (int j = i; j < bookList.size(); j ++) {
@@ -79,11 +78,11 @@ public class PrintedBook extends BookAbstract {
 
         ArrayList<String> details = new ArrayList<>();
         for (PrintedBook book : lastThree) {
-            String detail = "Title: " + book.getTitle() +
-                    ", Author: " + book.getAuthor() +
-                    ", Genre: " + book.getGenre() +
-                    ", Pages: " + book.getPages() +
-                    ", Cost: $" + book.getCost();
+            String detail = "[Title]: " + book.getTitle() +
+                    ", [Author]: " + book.getAuthor() +
+                    ", [Genre]: " + book.getGenre() +
+                    ", [Pages]: " + book.getPages() +
+                    ", [Cost]: $" + book.getCost();
             details.add(detail);
         }
         return details;
