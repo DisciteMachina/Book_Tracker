@@ -1,6 +1,9 @@
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class PrintedBook extends BookAbstract {
 
@@ -66,26 +69,62 @@ public class PrintedBook extends BookAbstract {
         return df.format(average);
     }
 
-
     public static ArrayList<String> lastThreePrintedBooks() {
         System.out.println();
         System.out.println("PRINTED BOOKS");
-        ArrayList<PrintedBook> lastThree = new ArrayList<>();
-        int i = Math.max(0, bookList.size() - 3);
-        for (int j = i; j < bookList.size(); j ++) {
-            lastThree.add(bookList.get(j));
-        }
+        ArrayList<String> lastThree = new ArrayList<>();
+        ArrayList<String> detailedBooks = new ArrayList<>();
 
-        ArrayList<String> details = new ArrayList<>();
-        for (PrintedBook book : lastThree) {
-            String detail = "[Title]: " + book.getTitle() +
-                    ", [Author]: " + book.getAuthor() +
-                    ", [Genre]: " + book.getGenre() +
-                    ", [Pages]: " + book.getPages() +
-                    ", [Cost]: $" + book.getCost();
-            details.add(detail);
+        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
+            String line;
+            while((line = reader.readLine()) != null) {
+                lastThree.add(line);
+            }
+            int i = Math.max(0, lastThree.size() - 3);
+            for (int j = i; j < lastThree.size(); j ++) {
+                String[] parts = lastThree.get(j).split(",");
+                if (parts.length == 5) {
+                    String detail = "[Title]: " + parts[0].trim() + "\n" +
+                            "[Author]: " + parts[1].trim() + "\n" +
+                            "[Genre]: " + parts[2].trim() + "\n" +
+                            "[Pages]: " + parts[3].trim() + "\n" +
+                            "[Cost]: $" + parts[4].trim() + "\n";
+                    detailedBooks.add(detail);
+                } else {
+                    System.out.println("Invalid book entry format: " + line);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Something went wrong");
+            e.printStackTrace();
         }
-        return details;
+        return detailedBooks;
+    }
+
+    public static ArrayList<String> allPrintedBooks() {
+        System.out.println();
+        System.out.println("PRINTED BOOKS");
+        ArrayList<String> detailedBooks = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 5) {
+                    String detail = "[Title]: " + parts[0].trim() + "\n" +
+                            "[Author]: " + parts[1].trim() + "\n" +
+                            "[Genre]: " + parts[2].trim() + "\n" +
+                            "[Pages]: " + parts[3].trim() + "\n" +
+                            "[Cost]: $" + parts[4].trim() + "\n";
+                    detailedBooks.add(detail);
+                } else {
+                    System.out.println("Invalid book entry format: " + line);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Something went wrong");
+            e.printStackTrace();
+        }
+        return detailedBooks;
     }
 
     public static void numberOfBooksPerGenre(Map<String, Integer> genreCounts) {
