@@ -29,7 +29,7 @@ public class AudioBook extends BookAbstract {
         totalLength += length;
         bookList.add(this);
 
-        writeBookToFile("AudioBook: " + title + ", " + author + ", " + genre + ", " + cost + ", " + length);
+        writeBookToFile("[AudioBook] " + title + ", " + author + ", " + genre + ", " + cost + ", " + length);
     }
 
     private void writeBookToFile(String bookDetails) {
@@ -41,7 +41,6 @@ public class AudioBook extends BookAbstract {
         }
     }
 
-    // Getters
     public double getCost() {
         return cost;
     }

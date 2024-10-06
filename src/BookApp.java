@@ -26,5 +26,8 @@ public class BookApp {
 
         System.out.println(BookInterface.lastSixBooks());
 
+        // GUI
+        BookGUI window = new BookGUI();
+        window.setVisible(true);
     }
 }

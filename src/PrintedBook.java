@@ -23,13 +23,13 @@ public class PrintedBook extends BookAbstract {
         this.title = title;
         this.author = author;
         this.genre = genre;
-        PrintedBook.pages = pages;
         this.cost = cost;
+        PrintedBook.pages = pages;
 
         totalPages += pages;
         bookList.add(this);
 
-        writeBookToFile("PrintedBook: " + title + ", " + author + ", " + genre + ", " + cost + ", " + pages);
+        writeBookToFile("[PrintedBook] " + title + ", " + author + ", " + genre + ", " + cost + ", " + pages);
 
     }
 
@@ -42,7 +42,6 @@ public class PrintedBook extends BookAbstract {
         }
     }
 
-    // Getters
     public double getCost() {
         return cost;
     }
@@ -63,15 +62,10 @@ public class PrintedBook extends BookAbstract {
         return pages;
     }
 
-   // public static ArrayList<String> getPrintedBooks() {
-   // }
-
-    // Returns cost of all printed books
     public static double totalCost() {
         return totalPages * COST_PER_PAGE;
     }
 
-    // Returns the average amount of pages for all the printed books
     public static String averagePages() {
         DecimalFormat df = new DecimalFormat("#");
 
@@ -84,7 +78,7 @@ public class PrintedBook extends BookAbstract {
         return df.format(average);
     }
 
-    // Returns the last three printed books added
+
     public static ArrayList<String> lastThreePrintedBooks() {
         ArrayList<PrintedBook> lastThree = new ArrayList<>();
         int i = Math.max(0, bookList.size() - 3);
@@ -104,7 +98,6 @@ public class PrintedBook extends BookAbstract {
         return details;
     }
 
-    // Keeps count of types of genre
     public static void numberOfBooksPerGenre(Map<String, Integer> genreCounts) {
         for (PrintedBook book : bookList) {
             genreCounts.put(book.getGenre().toLowerCase(), genreCounts.getOrDefault(book.getGenre().toLowerCase(), 0) + 1);
