@@ -11,6 +11,7 @@ public class PrintedBook extends BookAbstract {
     private final String author;
     private final String genre;
     private final double cost;
+    private final int pages;
 
 
     public PrintedBook(String title, String author, String genre, double cost, int pages) {
@@ -18,6 +19,7 @@ public class PrintedBook extends BookAbstract {
         this.author = author;
         this.genre = genre;
         this.cost = cost;
+        this.pages = pages;
 
         BookLogger.writeBookToFile("PRINTED," + title + ", " + author + ", " + genre + ", " + pages + ", " + cost + "\n");
     }
@@ -136,5 +138,16 @@ public class PrintedBook extends BookAbstract {
             throw new RuntimeException(e);
         }
         return map;
+    }
+
+    @Override
+    public String toString() {
+        return "PrintedBook{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", genre='" + genre + '\'' +
+                ", cost=" + cost +
+                ", pages=" + pages +
+                '}';
     }
 }

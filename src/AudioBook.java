@@ -19,7 +19,6 @@ public class AudioBook extends BookAbstract {
 
 
     public AudioBook(String title, String author, String genre, double cost, double length) {
-        super(title, author, genre, length);
         this.title = title;
         this.author = author;
         this.genre = genre;
@@ -121,8 +120,9 @@ public class AudioBook extends BookAbstract {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
 
-                if (parts.length == 6 && parts[0].trim().equals("AUDIO,")) {
+                if (parts.length == 6 && parts[0].trim().equals("AUDIO")) {
                     String genre = parts[3].trim();
+                    System.out.println(parts[3]);
                     map.put(genre, map.getOrDefault(genre, 0) + 1);
                 }
             }

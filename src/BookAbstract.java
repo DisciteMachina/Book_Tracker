@@ -5,8 +5,10 @@ abstract class BookAbstract implements BookInterface {
     public HashMap<String, Integer> numberOfBooksPerGenre() {
         HashMap<String, Integer> printedGenreCount = PrintedBook.printedGenreCount();
         HashMap<String, Integer> audioGenreCount = AudioBook.audioGenreCount();
-
         HashMap<String, Integer> combinedGenreCount = new HashMap<>();
+
+        System.out.println(printedGenreCount);
+        System.out.println(audioGenreCount);
 
             for (String genre : printedGenreCount.keySet()) {
             combinedGenreCount.put(genre, printedGenreCount.get(genre));
@@ -19,7 +21,7 @@ abstract class BookAbstract implements BookInterface {
             return combinedGenreCount;
     }
 
-    public static double getTotalCost() {
+    public double getTotalCost() {
         return PrintedBook.totalCost() + AudioBook.totalCost();
     }
 
