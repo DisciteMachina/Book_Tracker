@@ -1,6 +1,4 @@
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -15,12 +13,28 @@ public class BookLogger {
                 throw new RuntimeException(e);
             }
         } else {
-            System.out.println("Book already logged: " + bookDetails);
+            // This removes the PRINTED/AUDIO from the line
+            int commaIndex = bookDetails.indexOf(",");
+            System.out.println("Book already logged: " + bookDetails.substring(commaIndex + 1));
             System.out.println();
         }
     }
 
+
     public static boolean checkLogged(String bookDetails) {
+        List<BookDTO> books = readBooksFromFile();
+        String title = bookDetails.split(",")[1].trim(); // Get the title (the first part)
+
+        for (BookDTO book : books) {
+            if (book.getTitle().equals(title)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Helper method to check if a book is logged in the txt file before adding
+ /*   public static boolean checkLogged(String bookDetails) {
         String title = bookDetails.split(",")[1].trim(); // Get the title (the first part)
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
@@ -37,6 +51,9 @@ public class BookLogger {
         return true;
     }
 
+  */
+
+    // Read all books from txt file and add them to the books list
     public static List<BookDTO> readBooksFromFile() {
         List<BookDTO> books = new ArrayList<>();
 
@@ -53,7 +70,7 @@ public class BookLogger {
         return books;
     }
 
-    // Method to create a BookDTO from a line in the file
+    // Add books from txt file to a list for easy manipulation.
     public static BookDTO createBookFromLine(String line) {
         String[] parts = line.split(",");
 
@@ -63,8 +80,8 @@ public class BookLogger {
         String genre = parts[3].trim();
 
         // Check the type and appropriately assign pages or length
-        int pages = 0;
-        double length = 0.0;
+        int pages;
+        double length;
         double cost;
 
         if (type.equalsIgnoreCase("PRINTED")) {
@@ -81,6 +98,7 @@ public class BookLogger {
         }
     }
 
+    // Method to delete book
     public static void deleteBook(String book) {
         List<String> linesToKeep = new ArrayList<>();
 
