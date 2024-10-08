@@ -1,9 +1,9 @@
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        List<BookDTO> books = BookLogger.readBooksFromFile();
         BookApp app = new BookApp();
         Scanner input = new Scanner(System.in);
 
@@ -36,33 +36,37 @@ public class Main {
                             System.out.println("Cancel to cancel");
                             String printedBook = input.nextLine();
 
-                            // Split string into parts, and extract info
-                            String[] parts = printedBook.split(",");
-                            if (parts.length == 5) {
-                                try {
-                                    String title = parts[0].trim();
-                                    String author = parts[1].trim();
-                                    String genre = parts[2].trim();
-                                    double cost = Double.parseDouble(parts[3].trim());
-                                    int pages = Integer.parseInt(parts[4].trim());
+                            if (printedBook.equalsIgnoreCase("cancel")) {
+                                break;
+                            } else {
+                                // Split string into parts, and extract info
+                                String[] parts = printedBook.split(",");
+                                if (parts.length == 5) {
+                                    try {
+                                        String title = parts[0].trim();
+                                        String author = parts[1].trim();
+                                        String genre = parts[2].trim();
+                                        int pages = Integer.parseInt(parts[3].trim());
+                                        double cost = Double.parseDouble(parts[4].trim());
 
-                                    new PrintedBook(title, author, genre, cost, pages);
-                                    break;
-                                } catch (NumberFormatException e) {
+                                        new PrintedBook(title, author, genre, pages, cost);
+                                        break;
+                                    } catch (NumberFormatException e) {
+                                        System.out.println("Invalid input format");
+                                    }
+                                } else {
                                     System.out.println("Invalid input format");
                                 }
-                            } else {
-                                System.out.println("Invalid input format");
                             }
-                            // AUDIOBOOK
                         }
-                    } else if (bookType == 2) {
+                    }
+                    // AUDIOBOOK
+                    else if (bookType == 2) {
                         while (true) {
                             System.out.println("Enter book details");
                             System.out.println("Title, Author, Genre, Cost, Length (in minutes)");
                             System.out.println("Cancel to cancel");
                             String audioBook = input.nextLine();
-                            input.nextLine();
 
                             // Split string into parts, and extract info
                             String[] parts = audioBook.split(",");
@@ -89,9 +93,9 @@ public class Main {
                     } else if (bookType == 3) {
                         break;
                     }
+                    break;
                 // DELETE BOOKS
                 case 2:
-                    List<BookDTO> books = BookLogger.readBooksFromFile();
                     while(true) {
                         System.out.println("Enter the title of the book");
                         System.out.println("Cancel to cancel");

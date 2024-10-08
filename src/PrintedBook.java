@@ -14,7 +14,7 @@ public class PrintedBook extends BookAbstract {
     private final int pages;
 
 
-    public PrintedBook(String title, String author, String genre, double cost, int pages) {
+    public PrintedBook(String title, String author, String genre, int pages, double cost) {
         this.title = title;
         this.author = author;
         this.genre = genre;

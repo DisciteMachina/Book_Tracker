@@ -2,13 +2,11 @@ import java.util.HashMap;
 
 abstract class BookAbstract implements BookInterface {
 
+    // returns the number of books per genre
     public HashMap<String, Integer> numberOfBooksPerGenre() {
         HashMap<String, Integer> printedGenreCount = PrintedBook.printedGenreCount();
         HashMap<String, Integer> audioGenreCount = AudioBook.audioGenreCount();
         HashMap<String, Integer> combinedGenreCount = new HashMap<>();
-
-        System.out.println(printedGenreCount);
-        System.out.println(audioGenreCount);
 
             for (String genre : printedGenreCount.keySet()) {
             combinedGenreCount.put(genre, printedGenreCount.get(genre));

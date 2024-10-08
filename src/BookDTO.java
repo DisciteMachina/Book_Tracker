@@ -1,11 +1,14 @@
+// Data transfer object for easy look up, rather
+// than having to read the txt file over and over
+
 public class BookDTO {
-    private String type;
-    private String title;
-    private String author;
-    private String genre;
-    private double cost;
-    private int pages;
-    private double length;
+    private final String type;
+    private final String title;
+    private final String author;
+    private final String genre;
+    private final double cost;
+    private final int pages;
+    private final double length;
 
     // Constructor for printed books
     public BookDTO(String type, String title, String author, String genre, double cost, int pages) {
@@ -29,46 +32,21 @@ public class BookDTO {
         this.pages = 0; // N/A
     }
 
-    // Getters
-    public String getType() {
-        return type;
-    }
-
     public String getTitle() {
         return title;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public int getPages() {
-        return pages;
-    }
-
-    public double getLength() {
-        return length;
-    }
-
+    // Override the default to string method so it looks better
     @Override
     public String toString() {
         String details = "[Title]: " + title + "\n" +
                 "[Author]: " + author + "\n" +
                 "[Genre]: " + genre + "\n" +
-                "[Cost]: $" + cost + "\n" +
-                "[Type]: " + type;
+                "[Cost]: $" + cost;
         if (type.equals("PRINTED")) {
-            details += "\n" + "[Pages]: " + pages + "\n";
+            details += "\n" + "[Pages]: " + pages +"\n" + "[Type]: " + type + "\n";
         } else {
-            details += "\n" + " [Length]: " + length + " minutes" + "\n";
+            details += "\n" + "[Length]: " + length +  " minutes" + "\n" +  "[Type]: " + type + "\n";
         }
         return details;
     }
