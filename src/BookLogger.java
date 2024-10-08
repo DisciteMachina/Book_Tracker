@@ -20,7 +20,7 @@ public class BookLogger {
         }
     }
 
-
+    // Helper method to check if a book is logged in the txt file before adding
     public static boolean checkLogged(String bookDetails) {
         List<BookDTO> books = readBooksFromFile();
         String title = bookDetails.split(",")[1].trim(); // Get the title (the first part)
@@ -32,26 +32,6 @@ public class BookLogger {
         }
         return true;
     }
-
-    // Helper method to check if a book is logged in the txt file before adding
- /*   public static boolean checkLogged(String bookDetails) {
-        String title = bookDetails.split(",")[1].trim(); // Get the title (the first part)
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String loggedTitle = line.split(",")[0].trim();
-                if (loggedTitle.equalsIgnoreCase(title)) {
-                    return false;
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return true;
-    }
-
-  */
 
     // Read all books from txt file and add them to the books list
     public static List<BookDTO> readBooksFromFile() {
