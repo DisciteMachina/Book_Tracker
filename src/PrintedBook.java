@@ -1,153 +1,101 @@
-import java.util.ArrayList;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
 
-public class PrintedBook extends BookAbstract {
-    static final double COST_PER_PAGE = 10.0;
+public class PrintedBook extends Book {
+    private String title;
+    private String author;
+    private String genre;
+    private double cost;
+    private double pages;
 
-    private final String title;
-    private final String author;
-    private final String genre;
-    private final double cost;
-    private final int pages;
+    private static double totalPages;
 
+    public PrintedBook(String title, String author, String genre, double cost, double pages) {
+        super();
+        storeBookInfo(title, author, genre, cost);
+        setPages(pages);
 
-    public PrintedBook(String title, String author, String genre, int pages, double cost) {
+    }
+
+    public void storeBookInfo(String title, String author, String genre, double cost) {
         this.title = title;
         this.author = author;
         this.genre = genre;
         this.cost = cost;
-        this.pages = pages;
+    }
 
-        BookLogger.writeBookToFile("PRINTED," + title + ", " + author + ", " + genre + ", " + pages + ", " + cost + "\n");
+    // Setter for pages
+    public void setPages(double pages) {
+        this.pages = pages;
+        writeFile(title, author, genre, cost, pages);
+    }
+
+    public static double getTotalPages() {
+        BookManager bookManager = new BookManager();
+        List<String> books = bookManager.getPrintedBooks();
+
+        for (String loggedBook : books) {
+            double bookPages = Double.parseDouble(loggedBook.split(",")[5].trim());
+            totalPages += bookPages;
+        }
+        return totalPages;
     }
 
     public double getCost() {
+        System.out.println("The cost of " + getTitle() + "is " + cost);
         return cost;
     }
 
-    public static double totalCost() {
-        int totalPages = 0;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println("Line: " + line);
-                String[] parts = line.split(",", 6);
-                System.out.println("Parts count: " + parts.length);
-                if (parts.length >= 4) {
-                    int page = Integer.parseInt(parts[3].trim());
-                    totalPages += page;
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return totalPages * COST_PER_PAGE;
+    public String getTitle() {
+        return title;
     }
 
-
-    public static int averagePages() {
-        int amountOfBooks = 0;
-        int totalPages = 0;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                int page = Integer.parseInt(parts[4].trim());
-                totalPages += page;
-                amountOfBooks ++;
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return totalPages / amountOfBooks;
+    public double getTotalCost() {
+        double COST_PER_PAGE = 10;
+        return (getTotalPages() * COST_PER_PAGE);
     }
 
-    public static ArrayList<String> lastThreePrintedBooks() {
-        System.out.println();
-        System.out.println("PRINTED BOOKS");
-        ArrayList<String> lastThree = new ArrayList<>();
-        ArrayList<String> bookList = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
-            String line;
-            while((line = reader.readLine()) != null) {
-                lastThree.add(line);
-            }
-            int i = Math.max(0, lastThree.size() - 3);
-            for (int j = i; j < lastThree.size(); j ++) {
-                String[] parts = lastThree.get(j).split(",");
-                if (parts.length == 6) {
-                    String detail = "[Title]: " + parts[0].trim() + "\n" +
-                            "[Author]: " + parts[1].trim() + "\n" +
-                            "[Genre]: " + parts[2].trim() + "\n" +
-                            "[Pages]: " + parts[3].trim() + "\n" +
-                            "[Cost]: $" + parts[4].trim() + "\n";
-                    bookList.add(detail);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return bookList;
+    public void writeFile(String title, String author, String genre, double cost, double pages) {
+        BookManager bookManager = new BookManager();
+        String book = String.join(",", "PRINTED", title, author, genre, String.valueOf(cost), String.valueOf(pages));
+        bookManager.writeToFile(book);
     }
 
-    public static ArrayList<String> allPrintedBooks() {
-        System.out.println();
-        System.out.println("PRINTED BOOKS");
-
-        ArrayList<String> bookList = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 6 && parts[0].trim().equals("PRINTED,")) {
-                    String detail = "[Title]: " + parts[1].trim() + "\n" +
-                            "[Author]: " + parts[2].trim() + "\n" +
-                            "[Genre]: " + parts[3].trim() + "\n" +
-                            "[Pages]: " + parts[4].trim() + "\n" +
-                            "[Cost]: $" + parts[5].trim() + "\n";
-                    bookList.add(detail);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public static double averagePages() {
+        List<String> books = BookManager.readBooksFromFile(); // All the books
+        int count = 0;
+        for (int i = 0; i < books.size(); i++) {
+            count ++;
         }
-        return bookList;
+        return (getTotalPages() / count);
     }
 
-    public static HashMap<String, Integer> printedGenreCount() {
-        HashMap<String, Integer> map = new HashMap<>();
+    public static void lastThreePrintedBooks() {
+        BookManager bookManager = new BookManager();
+        List<String> printedBooks = bookManager.getPrintedBooks();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("book_log.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-
-                if (parts.length == 6 && parts[0].trim().equals("PRINTED")) {
-                    String genre = parts[3].trim();
-                    System.out.println(parts[3]);
-                    map.put(genre, map.getOrDefault(genre, 0) + 1);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        // Get the last three books with subList(size of array - 3, size of array)
+        List<String> lastThreeBooks = printedBooks.subList(printedBooks.size() -3, printedBooks.size());
+        System.out.println("---------------------------------");
+        System.out.println("[The last three printed books are]: ");
+        for (String loggedBook : lastThreeBooks) {
+            String[] parts = loggedBook.split(",");
+            String detail = "[Title]: " + parts[1].trim() + "\n" +
+                    "[Author]: " + parts[2].trim() + "\n" +
+                    "[Genre]: " + parts[3].trim() + "\n" +
+                    "[Pages]: " + parts[4].trim() + "\n" +
+                    "[Cost]: $" + parts[5].trim() + "\n";
+            System.out.println("---------------------------------");
+            System.out.println(detail);
         }
-        return map;
     }
 
     @Override
     public String toString() {
-        return "PrintedBook{" +
-                "title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", genre='" + genre + '\'' +
-                ", cost=" + cost +
-                ", pages=" + pages +
-                '}';
+        return "[PRINTED BOOK]" + '\n' +
+                "[title]: " + title + '\n' +
+                "[author]: " + author + '\n' +
+                "[genre]: " + genre + '\n' +
+                "[cost]: $" + cost + '\n' +
+                "[pages]: " + pages + '\n';
     }
 }
