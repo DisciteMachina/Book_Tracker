@@ -9,7 +9,6 @@ public class AudioBook extends Book {
     private double length;
 
     private int totalLength;
-    private final double COST_PER_MINUTE = 10;
 
     public AudioBook(String title, String author, String genre, double cost, double length) {
         super();
@@ -39,9 +38,11 @@ public class AudioBook extends Book {
         return genre;
     }
 
+    @Override
     public double getCost() {
-        System.out.println("The cost of " + getTitle() + "is " + cost);
-        return cost;
+        double COST_PER_MINUTE = 5;
+        System.out.println("The cost of " + getTitle() + "is " + length * COST_PER_MINUTE);
+        return length * COST_PER_MINUTE;
     }
 
     public String getTitle() {

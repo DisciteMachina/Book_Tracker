@@ -50,8 +50,9 @@ public class BookManager {
         return books;
     }
 
-    public static void loadBooksFromFile() {
+    public static List<Book> loadBooksFromFile() {
         List<String> books = readBooksFromFile();
+        List<Book> bookList = new ArrayList<>();
 
         for (String book : books) {
             String[] loggedBook = book.split(",");
@@ -63,12 +64,13 @@ public class BookManager {
 
             if (type.equalsIgnoreCase("PRINTED")) {
                 double pages = Double.parseDouble(loggedBook[5]);
-                new PrintedBook(title, author, genre, cost, pages);
+                bookList.add(new PrintedBook(title, author, genre, cost, pages));
             } else if (type.equalsIgnoreCase("AUDIO")) {
                 double length = Double.parseDouble(loggedBook[5]);
-                new AudioBook(title, author, genre, cost, length);
+                bookList.add(new AudioBook(title, author, genre, cost, length));
             }
         }
+        return bookList;
     }
 
     public List<String> getPrintedBooks() {

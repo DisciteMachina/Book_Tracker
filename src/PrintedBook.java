@@ -40,18 +40,15 @@ public class PrintedBook extends Book {
         return totalPages;
     }
 
+    @Override
     public double getCost() {
-        System.out.println("The cost of " + getTitle() + "is " + cost);
-        return cost;
+        double COST_PER_PAGE = 10;
+        System.out.println("The cost of " + getTitle() + "is " + pages * COST_PER_PAGE);
+        return (pages * COST_PER_PAGE);
     }
 
     public String getTitle() {
         return title;
-    }
-
-    public double getTotalCost() {
-        double COST_PER_PAGE = 10;
-        return (getTotalPages() * COST_PER_PAGE);
     }
 
     public void writeFile(String title, String author, String genre, double cost, double pages) {

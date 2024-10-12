@@ -1,23 +1,17 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Book implements BookInterface{
-    private static List<Book> allBooks = new ArrayList<>();
-
     public Book() {
-        allBooks.add(this);
     }
 
     public double getTotalCost() {
+        List<Book> allBooks = BookManager.loadBooksFromFile();
         double totalCost = 0;
         for (Book book : allBooks) {
-            totalCost += book.getCost();
+            double bookCost = book.getCost();
+            totalCost += bookCost;
         }
         return totalCost;
-    }
-
-    public List<Book> getAllBooks() {
-        return allBooks;
     }
 
     public String numberOfBooksPerGenre() {
