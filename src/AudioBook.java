@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public class AudioBook extends Book {
@@ -8,7 +7,8 @@ public class AudioBook extends Book {
     private double cost;
     private double length;
 
-    private int totalLength;
+    private static double totalLength = 0;
+
 
     public AudioBook(String title, String author, String genre, double cost, double length) {
         super();
@@ -30,14 +30,6 @@ public class AudioBook extends Book {
 
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
     @Override
     public double getCost() {
         double COST_PER_MINUTE = 5;
@@ -49,8 +41,15 @@ public class AudioBook extends Book {
         return title;
     }
 
-    public double getLength() {
-        return length;
+    public static double getTotalLength() {
+        BookManager bookManager = new BookManager();
+        List<String> books = bookManager.getAudioBooks();
+
+        for (String loggedBook : books) {
+            double bookLength = Double.parseDouble(loggedBook.split(",")[5].trim());
+            totalLength += bookLength;
+        }
+        return totalLength;
     }
 
     public void writeFile(String title, String author, String genre, double cost, double length) {
@@ -59,17 +58,38 @@ public class AudioBook extends Book {
         bookManager.writeToFile(book);
     }
 
-    public String averagePages() {
-        return null;
+    public static double averageLength () {
+        List<String> books = BookManager.readBooksFromFile(); // All the books
+        int count = 0;
+        for (int i = 0; i < books.size(); i++) {
+            count ++;
+        }
+        return (getTotalLength() / count);
     }
 
-    public String lastThreePrintedBooks() {
-        return null;
+    public static void lastThreeAudioBooks() {
+        BookManager bookManager = new BookManager();
+        List<String> audioBooks = bookManager.getAudioBooks();
+
+        // Get the last three books with subList(size of array - 3, size of array)
+        List<String> lastThreeBooks = audioBooks.subList(audioBooks.size() -3, audioBooks.size());
+        System.out.println("---------------------------------");
+        System.out.println("[The last three printed books are]: ");
+        for (String loggedBook : lastThreeBooks) {
+            String[] parts = loggedBook.split(",");
+            String detail = "[Title]: " + parts[1].trim() + "\n" +
+                    "[Author]: " + parts[2].trim() + "\n" +
+                    "[Genre]: " + parts[3].trim() + "\n" +
+                    "[Length]: " + parts[4].trim() + "\n" +
+                    "[Cost]: $" + parts[5].trim() + "\n";
+            System.out.println("---------------------------------");
+            System.out.println(detail);
+        }
     }
 
     @Override
     public String toString() {
-        return "[PRINTED BOOK]" + '\n' +
+        return "[AUDIO BOOK]" + '\n' +
                 "[title]: " + title + '\n' +
                 "[author]: " + author + '\n' +
                 "[genre]: " + genre + '\n' +

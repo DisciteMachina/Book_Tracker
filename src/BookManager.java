@@ -87,6 +87,15 @@ public class BookManager {
     }
 
     public List<String> getAudioBooks() {
-        return null;
+        List<String> books = readBooksFromFile();
+        List<String> audioBooks = new ArrayList<>();
+
+        for (String loggedBook : books) {
+            String type = loggedBook.split(",")[0].trim();
+            if (type.equalsIgnoreCase("AUDIO")) {
+                audioBooks.add(loggedBook);
+            }
+        }
+        return audioBooks;
     }
 }

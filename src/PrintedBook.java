@@ -58,8 +58,7 @@ public class PrintedBook extends Book {
     }
 
     public static double averagePages() {
-        BookManager bookManager = new BookManager();
-        List<String> books = bookManager.readBooksFromFile(); // All the books
+        List<String> books = BookManager.readBooksFromFile(); // All the books
         int count = 0;
         for (int i = 0; i < books.size(); i++) {
             count ++;
