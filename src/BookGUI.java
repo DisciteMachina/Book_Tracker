@@ -1,110 +1,105 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 class BookGUI extends JFrame {
-    final int WIDTH = 500;
+    final int WIDTH = 700;
     final int HEIGHT = 400;
 
-    // Constructor
     public BookGUI() {
+        JButton addBook = new JButton("Add Book");
+        JButton viewBook = new JButton("View Books");
+        JButton deleteBook = new JButton("Delete Book");
 
         // MAIN FRAME
         setTitle("Book Tracker");
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
-
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
 
         // TITLE LABEL
         JLabel title = new JLabel("Book Tracker");
-        title.setBounds(150, 50, 200, 30);
         title.setFont(new Font("Times New Roman", Font.BOLD, 25));
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // BUTTON PANEL
+        // CARD LAYOUT TO MANAGE PANELS
+        CardLayout cardLayout = new CardLayout();
+        JPanel cardPanel = new JPanel(cardLayout);
+
+        // BUTTON PANEL FOR MAIN PAGE
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+
+        // MAIN BUTTON PANEL
+        cardPanel.add(buttonPanel, "mainPanel");
 
         // ADD BOOK BUTTON
-        JButton addBook = new JButton("Add Book");
-        addBook.setSize(150, 50);
         addBook.setPreferredSize(new Dimension(150, 50));
         buttonPanel.add(addBook);
 
-        addBook.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String bookDetails = JOptionPane.showInputDialog(null, "Enter book (type, title, author, genre, cost, pages/length)");
-                if (bookDetails != null && !bookDetails.trim().isEmpty()) {
-                    // PRINTED BOOKS
-                    if (bookDetails.split(",")[0].equalsIgnoreCase("printed")) {
-                        String[] parts = bookDetails.split(",");
+        addBook.addActionListener(e -> {
+            String bookDetails = JOptionPane.showInputDialog(null, "Enter book (type, title, author, genre, cost, pages/length)");
+            if (bookDetails != null && !bookDetails.trim().isEmpty()) {
 
-                        String title = parts[1].trim();
-                        String author = parts[2].trim();
-                        String genre = parts[3].trim();
-                        double cost = Double.parseDouble(parts[4].trim());
-                        double pages = Double.parseDouble(parts[5].trim());
+                if (bookDetails.split(",")[0].equalsIgnoreCase("printed")) {
+                    String[] parts = bookDetails.split(",");
+                    new PrintedBook(parts[1].trim(), parts[2].trim(), parts[3].trim(),
+                            Double.parseDouble(parts[4].trim()), Double.parseDouble(parts[5].trim()));
+                    JOptionPane.showMessageDialog(null, "Printed Book added: " + parts[1].trim());
 
-                        new PrintedBook(title, author, genre, cost, pages);
+                } else if (bookDetails.split(",")[0].equalsIgnoreCase("audio")) {
+                    String[] parts = bookDetails.split(",");
+                    new AudioBook(parts[1].trim(), parts[2].trim(), parts[3].trim(),
+                            Double.parseDouble(parts[4].trim()), Double.parseDouble(parts[5].trim()));
+                    JOptionPane.showMessageDialog(null, "AudioBook added: " + parts[1].trim());
 
-                        JOptionPane.showMessageDialog(null, "Printed Book added: " + title);
-                        // AUDIOBOOKS
-                    } else if (bookDetails.split(",")[0].equalsIgnoreCase("audio")) {
-                        String[] parts = bookDetails.split(",");
-
-                        String title = parts[1].trim();
-                        String author = parts[2].trim();
-                        String genre = parts[3].trim();
-                        double cost = Double.parseDouble(parts[4].trim());
-                        double length = Double.parseDouble(parts[5].trim());
-
-                        new AudioBook(title, author, genre, cost, length);
-
-                        JOptionPane.showMessageDialog(null, "AudioBook added: " + bookDetails.split(",")[1]);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Something went wrong.");
-                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Empty input");
+                    JOptionPane.showMessageDialog(null, "Invalid book type.");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "No input provided.");
             }
         });
 
         // ADD VIEW BOOK BUTTON
-        JButton viewBook = new JButton("View Books");
-        viewBook.setSize(150, 50);
         viewBook.setPreferredSize(new Dimension(150, 50));
         buttonPanel.add(viewBook);
 
-        viewBook.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Button Clicked!");
-            }
-        });
+        // DYNAMIC BUTTON PANEL FOR VIEWING BOOKS
+        JPanel dynamicButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        JButton printedBooks = new JButton("Printed books");
+        JButton audioBooks = new JButton("Audiobooks");
+        JButton allBooks = new JButton("All books");
+        JButton backButton = new JButton("Back");
 
-        // ADD DELETE BUTTON
-        JButton deleteBook = new JButton("Delete Book");
-        deleteBook.setSize(150, 50);
+        printedBooks.setPreferredSize(new Dimension(150, 50));
+        audioBooks.setPreferredSize(new Dimension(150, 50));
+        allBooks.setPreferredSize(new Dimension(150, 50));
+        backButton.setPreferredSize(new Dimension(150, 50));
+
+        dynamicButtonPanel.add(printedBooks);
+        dynamicButtonPanel.add(audioBooks);
+        dynamicButtonPanel.add(allBooks);
+        dynamicButtonPanel.add(backButton);
+
+        // ADD DYNAMIC PANEL TO CARD LAYOUT
+        cardPanel.add(dynamicButtonPanel, "dynamicPanel");
+
+        // VIEW BOOK ACTION
+        viewBook.addActionListener(e -> cardLayout.show(cardPanel, "dynamicPanel"));
+
+        // DELETE BOOK BUTTON
         deleteBook.setPreferredSize(new Dimension(150, 50));
         buttonPanel.add(deleteBook);
 
-        deleteBook.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Button Clicked!");
-            }
-        });
+        // DELETE BUTTON ACTION
+        deleteBook.addActionListener(e -> JOptionPane.showMessageDialog(null, "Button Clicked!"));
 
-        mainPanel.add(title);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(buttonPanel);
+        // BACK BUTTON ACTION
+        backButton.addActionListener(e -> cardLayout.show(cardPanel, "mainPanel"));
 
-        add(mainPanel);
+        add(title, BorderLayout.NORTH);
+        add(cardPanel, BorderLayout.CENTER);
+
+        setVisible(true);
     }
 }
