@@ -45,11 +45,11 @@ public class PrintedBook extends Book {
     public double getCost() {
         double COST_PER_PAGE = 10;
         System.out.println("The cost of " + getTitle() + "is " + pages * COST_PER_PAGE);
-        return (pages * COST_PER_PAGE);
+        return (this.pages * COST_PER_PAGE);
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void writeFile(String title, String author, String genre, double cost, double pages) {
@@ -118,6 +118,10 @@ public class PrintedBook extends Book {
         }
 
         return sb.toString();
+    }
+
+    public int numberOfBooksPerGenre(String genre) {
+        return 0;
     }
 
     @Override

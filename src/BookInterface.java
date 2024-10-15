@@ -1,9 +1,12 @@
+import java.util.HashMap;
+import java.util.List;
+
 public interface BookInterface {
 
-    default String lastSixBooks() {
-        return null;
+    default void lastSixBooks() {
     }
 
-    String numberOfBooksPerGenre();
+    int numberOfBooksPerGenre(String genre);
+
     double getTotalCost();
 }

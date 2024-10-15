@@ -3,10 +3,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookManager {
-    static String FILE_NAME = "book_log.txt";
+    private static final String FILE_NAME = "book_log.txt";
+    private final List<String> cachedBooks;
 
     public BookManager() {
         ensureFileExists();
+        this.cachedBooks = readBooksFromFile();
     }
 
     private static void ensureFileExists() {
@@ -25,6 +27,7 @@ public class BookManager {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
                 writer.write(book);
                 writer.newLine();
+                cachedBooks.add(book);
             } catch (IOException e) {
                 throw new RuntimeException("Error while writing the file", e);
             }
@@ -33,7 +36,6 @@ public class BookManager {
     }
 
     public boolean checkIfLogged(String book) {
-        List<String> books = readBooksFromFile();
         String[] bookParts = book.split(",");
 
         if (bookParts.length < 2) {
@@ -42,8 +44,7 @@ public class BookManager {
 
         String title = bookParts[1];
 
-        for (String loggedBook : books) {
-
+        for (String loggedBook : cachedBooks) {
             String loggedTitle = loggedBook.split(",")[1].trim();
             if (loggedTitle.equalsIgnoreCase(title)) {
                 return true;
@@ -67,12 +68,13 @@ public class BookManager {
         return books;
     }
 
-    public static List<Book> loadBooksFromFile() {
-        List<String> books = readBooksFromFile();
+    public List<Book> loadBooksFromFile() {
         List<Book> bookList = new ArrayList<>();
 
-        for (String book : books) {
+        for (String book : cachedBooks) {
             String[] loggedBook = book.split(",");
+            if (loggedBook.length < 6) continue;
+
             String type = loggedBook[0].trim();
             String title = loggedBook[1].trim();
             String author = loggedBook[2].trim();
@@ -90,29 +92,22 @@ public class BookManager {
         return bookList;
     }
 
-    public List<String> getPrintedBooks() {
-        List<String> books = readBooksFromFile();
-        List<String> printedBooks = new ArrayList<>();
-
-        for (String loggedBook : books) {
-            String type = loggedBook.split(",")[0].trim();
-            if (type.equalsIgnoreCase("PRINTED")) {
-                printedBooks.add(loggedBook);
+    public List<String> getBooksByType(String type) {
+        List<String> matchedBooks = new ArrayList<>();
+        for (String loggedBook : cachedBooks) {
+            if (loggedBook.startsWith(type.toUpperCase() + ",")) {
+                matchedBooks.add(loggedBook);
             }
         }
-        return printedBooks;
+        return matchedBooks;
+    }
+
+    public List<String> getPrintedBooks() {
+        return getBooksByType("PRINTED");
     }
 
     public List<String> getAudioBooks() {
-        List<String> books = readBooksFromFile();
-        List<String> audioBooks = new ArrayList<>();
-
-        for (String loggedBook : books) {
-            String type = loggedBook.split(",")[0].trim();
-            if (type.equalsIgnoreCase("AUDIO")) {
-                audioBooks.add(loggedBook);
-            }
-        }
-        return audioBooks;
+        return getBooksByType("AUDIO");
     }
+
 }

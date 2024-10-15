@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class AudioBook extends Book {
@@ -41,13 +42,21 @@ public class AudioBook extends Book {
         return title;
     }
 
+    // Convert length to hours
+    public static double convertLength(double length) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        double lengthHours = length / 60;
+        return Double.parseDouble(df.format(lengthHours));
+    }
+
     public static double getTotalLength() {
         BookManager bookManager = new BookManager();
         List<String> books = bookManager.getAudioBooks();
+        double totalLength = 0;
 
         for (String loggedBook : books) {
             double bookLength = Double.parseDouble(loggedBook.split(",")[5].trim());
-            totalLength += bookLength;
+            totalLength += convertLength(bookLength);
         }
         return totalLength;
     }
@@ -88,6 +97,11 @@ public class AudioBook extends Book {
     }
 
     @Override
+    public int numberOfBooksPerGenre(String genre) {
+        return 0;
+    }
+
+    @Override
     public String toString() {
         return "[AUDIO BOOK]" + '\n' +
                 "[title]: " + title + '\n' +
@@ -96,4 +110,5 @@ public class AudioBook extends Book {
                 "[cost]: $" + cost + '\n' +
                 "[length]: " + length + '\n';
     }
+
 }
