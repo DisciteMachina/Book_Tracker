@@ -91,8 +91,8 @@ public class PrintedBook extends Book {
             sb.append("[Title]: ").append(parts[1].trim()).append("\n")
                     .append("[Author]: ").append(parts[2].trim()).append("\n")
                     .append("[Genre]: ").append(parts[3].trim()).append("\n")
-                    .append("[Pages]: ").append(parts[4].trim()).append("\n")
-                    .append("[Cost]: $").append(parts[5].trim()).append("\n")
+                    .append("[Cost]: $").append(parts[4].trim()).append("\n")
+                    .append("[Pages]: ").append(parts[5].trim()).append("\n")
                     .append("---------------------------------\n");
         }
 
@@ -112,8 +112,8 @@ public class PrintedBook extends Book {
             sb.append("[Title]: ").append(parts[1].trim()).append("\n")
                     .append("[Author]: ").append(parts[2].trim()).append("\n")
                     .append("[Genre]: ").append(parts[3].trim()).append("\n")
-                    .append("[Pages]: ").append(parts[4].trim()).append("\n")
-                    .append("[Cost]: $").append(parts[5].trim()).append("\n")
+                    .append("[Cost]: $").append(parts[4].trim()).append("\n")
+                    .append("[Pages]: ").append(parts[5].trim()).append("\n")
                     .append("---------------------------------\n");
         }
 

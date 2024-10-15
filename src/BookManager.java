@@ -5,6 +5,21 @@ import java.util.List;
 public class BookManager {
     static String FILE_NAME = "book_log.txt";
 
+    public BookManager() {
+        ensureFileExists();
+    }
+
+    private static void ensureFileExists() {
+        File file = new File(FILE_NAME);
+        if (!file.exists()) {
+            try {
+                file.createNewFile(); // Create the file if it doesn't exist
+            } catch (IOException e) {
+                throw new RuntimeException("Error while creating the file", e);
+            }
+        }
+    }
+
     public void writeToFile(String book) {
         if (!checkIfLogged(book)) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
@@ -39,6 +54,8 @@ public class BookManager {
 
     public static List<String> readBooksFromFile() {
         List<String> books = new ArrayList<>();
+        ensureFileExists();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             while ((line = reader.readLine()) != null) {
