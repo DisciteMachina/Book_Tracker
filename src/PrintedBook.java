@@ -1,5 +1,3 @@
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PrintedBook extends Book {
