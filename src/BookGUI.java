@@ -100,25 +100,44 @@ class BookGUI extends JFrame {
             dynamicButtonPanel.add(lastThreeBooksButton);
             dynamicButtonPanel.add(allPrintedBooksButton);
 
-            // Action listeners for new buttons
+            // AVERAGE PAGES
             averagePagesButton.addActionListener(a -> {
-                // Logic to calculate and show average pages
                 JOptionPane.showMessageDialog(null, "Average pages: " + PrintedBook.averagePages());
             });
 
+            // LAST THREE BOOKS
             lastThreeBooksButton.addActionListener(a -> {
-                // Logic to show the last 3 printed books
-                JOptionPane.showMessageDialog(null, PrintedBook.lastThreePrintedBooks());
+                String lastThreeBooks = PrintedBook.lastThreePrintedBooks();
+
+                JTextArea textArea = new JTextArea(lastThreeBooks);
+                textArea.setEditable(false);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setPreferredSize(new Dimension(400, 300)); // Set preferred size
+
+                JOptionPane.showMessageDialog(null, scrollPane, "All Printed Books", JOptionPane.INFORMATION_MESSAGE);
             });
 
+            // ALL PRINTED BOOKS
             allPrintedBooksButton.addActionListener(a -> {
-                // Logic to show all printed books
-                JOptionPane.showMessageDialog(null, "All printed books: ");
+                String allBooksInfo = PrintedBook.allPrintedBooks();
+
+                JTextArea textArea = new JTextArea(allBooksInfo);
+                textArea.setEditable(false);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setPreferredSize(new Dimension(400, 300)); // Set preferred size
+
+                JOptionPane.showMessageDialog(null, scrollPane, "All Printed Books", JOptionPane.INFORMATION_MESSAGE);
             });
+
 
             backButton.addActionListener(a -> cardLayout.show(cardPanel, "mainPanel"));
 
-            // Refresh the dynamic panel
             dynamicButtonPanel.revalidate();
             dynamicButtonPanel.repaint();
         });

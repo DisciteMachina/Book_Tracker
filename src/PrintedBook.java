@@ -1,4 +1,5 @@
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PrintedBook extends Book {
@@ -72,25 +73,53 @@ public class PrintedBook extends Book {
         return (int) average;
     }
 
-    public static Object lastThreePrintedBooks() {
+    public static String lastThreePrintedBooks() {
         BookManager bookManager = new BookManager();
         List<String> printedBooks = bookManager.getPrintedBooks();
 
-        // Get the last three books with subList(size of array - 3, size of array)
-        List<String> lastThreeBooks = printedBooks.subList(printedBooks.size() -3, printedBooks.size());
-        System.out.println("---------------------------------");
-        System.out.println("[The last three printed books are]: ");
+        if (printedBooks.size() < 3) {
+            return "Not enough printed books available.";
+        }
+
+        // Get the last three books
+        List<String> lastThreeBooks = printedBooks.subList(printedBooks.size() - 3, printedBooks.size());
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("[The last three printed books are]:\n");
+        sb.append("---------------------------------\n");
+
         for (String loggedBook : lastThreeBooks) {
             String[] parts = loggedBook.split(",");
-            String detail = "[Title]: " + parts[1].trim() + "\n" +
-                    "[Author]: " + parts[2].trim() + "\n" +
-                    "[Genre]: " + parts[3].trim() + "\n" +
-                    "[Pages]: " + parts[4].trim() + "\n" +
-                    "[Cost]: $" + parts[5].trim() + "\n";
-            System.out.println("---------------------------------");
-            System.out.println(detail);
+            sb.append("[Title]: ").append(parts[1].trim()).append("\n")
+                    .append("[Author]: ").append(parts[2].trim()).append("\n")
+                    .append("[Genre]: ").append(parts[3].trim()).append("\n")
+                    .append("[Pages]: ").append(parts[4].trim()).append("\n")
+                    .append("[Cost]: $").append(parts[5].trim()).append("\n")
+                    .append("---------------------------------\n");
         }
-        return null;
+
+        return sb.toString();
+    }
+
+    public static String allPrintedBooks() {
+        BookManager bookManager = new BookManager();
+        List<String> printedBooks = bookManager.getPrintedBooks();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("[All printed books]:\n");
+        sb.append("---------------------------------\n");
+
+        for (String loggedBook : printedBooks) {
+            String[] parts = loggedBook.split(",");
+            sb.append("[Title]: ").append(parts[1].trim()).append("\n")
+                    .append("[Author]: ").append(parts[2].trim()).append("\n")
+                    .append("[Genre]: ").append(parts[3].trim()).append("\n")
+                    .append("[Pages]: ").append(parts[4].trim()).append("\n")
+                    .append("[Cost]: $").append(parts[5].trim()).append("\n")
+                    .append("---------------------------------\n");
+        }
+
+        return sb.toString();
     }
 
     @Override
