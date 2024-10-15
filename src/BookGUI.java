@@ -60,9 +60,6 @@ class BookGUI extends JFrame {
             }
         });
 
-        // VIEW BOOK ACTION
-        viewBook.addActionListener(e -> cardLayout.show(cardPanel, "dynamicPanel"));
-
         // ADD VIEW BOOK BUTTON
         viewBook.setPreferredSize(new Dimension(150, 50));
         buttonPanel.add(viewBook);
@@ -85,6 +82,7 @@ class BookGUI extends JFrame {
         dynamicButtonPanel.add(backButton);
 
         printedBooks.addActionListener(e -> {
+            // Clear the dynamic panel before adding new buttons
             dynamicButtonPanel.removeAll();
 
             // Buttons for printed book options
@@ -92,14 +90,15 @@ class BookGUI extends JFrame {
             JButton lastThreeBooksButton = new JButton("Last 3 books");
             JButton allPrintedBooksButton = new JButton("All books");
 
+            // Set button sizes
             averagePagesButton.setPreferredSize(new Dimension(150, 50));
             lastThreeBooksButton.setPreferredSize(new Dimension(150, 50));
             allPrintedBooksButton.setPreferredSize(new Dimension(150, 50));
 
+            // Add buttons to dynamic panel
             dynamicButtonPanel.add(averagePagesButton);
             dynamicButtonPanel.add(lastThreeBooksButton);
             dynamicButtonPanel.add(allPrintedBooksButton);
-            dynamicButtonPanel.add(backButton);
 
             // AVERAGE PAGES
             averagePagesButton.addActionListener(a -> {
@@ -136,22 +135,19 @@ class BookGUI extends JFrame {
                 JOptionPane.showMessageDialog(null, scrollPane, "All Printed Books", JOptionPane.INFORMATION_MESSAGE);
             });
 
-            // BACK BUTTON
-            backButton.addActionListener(a -> {
-                dynamicButtonPanel.removeAll();
-                dynamicButtonPanel.add(printedBooks);
-                dynamicButtonPanel.add(audioBooks);
-                dynamicButtonPanel.add(allBooks);
-                dynamicButtonPanel.add(backButton);
-                dynamicButtonPanel.revalidate();
-                dynamicButtonPanel.repaint();
-                cardLayout.show(cardPanel, "mainPanel");
-            });
+
+            backButton.addActionListener(a -> cardLayout.show(cardPanel, "mainPanel"));
 
             dynamicButtonPanel.revalidate();
             dynamicButtonPanel.repaint();
         });
 
+
+        // ADD DYNAMIC PANEL TO CARD LAYOUT
+        cardPanel.add(dynamicButtonPanel, "dynamicPanel");
+
+        // VIEW BOOK ACTION
+        viewBook.addActionListener(e -> cardLayout.show(cardPanel, "dynamicPanel"));
 
         // DELETE BOOK BUTTON
         deleteBook.setPreferredSize(new Dimension(150, 50));
@@ -160,9 +156,8 @@ class BookGUI extends JFrame {
         // DELETE BUTTON ACTION
         deleteBook.addActionListener(e -> JOptionPane.showMessageDialog(null, "Button Clicked!"));
 
-
-        // ADD DYNAMIC PANEL TO CARD LAYOUT
-        cardPanel.add(dynamicButtonPanel, "dynamicPanel");
+        // BACK BUTTON ACTION
+        backButton.addActionListener(e -> cardLayout.show(cardPanel, "mainPanel"));
 
         add(title, BorderLayout.NORTH);
         add(cardPanel, BorderLayout.CENTER);
@@ -170,4 +165,5 @@ class BookGUI extends JFrame {
         setVisible(true);
     }
 }
+
 

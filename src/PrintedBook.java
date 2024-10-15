@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.List;
 
 public class PrintedBook extends Book {
@@ -45,11 +46,11 @@ public class PrintedBook extends Book {
     public double getCost() {
         double COST_PER_PAGE = 10;
         System.out.println("The cost of " + getTitle() + "is " + pages * COST_PER_PAGE);
-        return (this.pages * COST_PER_PAGE);
+        return (pages * COST_PER_PAGE);
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
     public void writeFile(String title, String author, String genre, double cost, double pages) {
@@ -120,8 +121,17 @@ public class PrintedBook extends Book {
         return sb.toString();
     }
 
-    public int numberOfBooksPerGenre(String genre) {
-        return 0;
+    public HashMap<String, Integer> numberOfBooksPerGenre() {
+        HashMap<String, Integer> genreCountMap = new HashMap<>();
+        BookManager bookManager = new BookManager();
+        List<String> printedBooks = bookManager.getPrintedBooks();
+
+        for (String book : printedBooks) {
+            String genre = book.split(",")[3].trim(); // Get the genre from the book data
+            genreCountMap.put(genre, genreCountMap.getOrDefault(genre, 0) + 1);
+        }
+
+        return genreCountMap;
     }
 
     @Override

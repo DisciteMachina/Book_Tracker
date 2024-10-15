@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class Book implements BookInterface{
@@ -15,5 +16,25 @@ public abstract class Book implements BookInterface{
         return totalCost;
     }
 
+    public HashMap<String, Integer> numberOfBooksPerGenre() {
+        HashMap<String, Integer> totalGenreCountMap = new HashMap<>();
+
+        totalGenreCountMap.putAll(getPrintedBookGenres());
+        totalGenreCountMap.putAll(getAudioBookGenres());
+
+        return totalGenreCountMap;
+    }
+
+    private HashMap<String, Integer> getPrintedBookGenres() {
+        PrintedBook printedBook = new PrintedBook("", "", "", 0, 0);
+        return printedBook.numberOfBooksPerGenre();
+    }
+
+    private HashMap<String, Integer> getAudioBookGenres() {
+        AudioBook audioBook = new AudioBook("", "", "", 0, 0);
+        return audioBook.numberOfBooksPerGenre();
+    }
+
     public abstract double getCost();
+    public abstract String getTitle();
 }
