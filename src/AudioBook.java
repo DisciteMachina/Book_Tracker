@@ -12,9 +12,11 @@ public class AudioBook extends Book {
 
 
     public AudioBook(String title, String author, String genre, double cost, double length) {
-        super();
+        super(title, author, genre, cost);
+        this.length = length;
+
         storeBookInfo(title, author, genre, cost);
-        setLength(length);
+        writeFile();
     }
 
     public void storeBookInfo(String title, String author, String genre, double cost) {
@@ -24,13 +26,6 @@ public class AudioBook extends Book {
         this.cost = cost;
     }
 
-    // Setter for length
-    public void setLength(double length) {
-        this.length = length;
-        writeFile(title, author, genre, cost, length);
-
-    }
-
     @Override
     public double getCost() {
         double COST_PER_MINUTE = 5;
@@ -38,8 +33,19 @@ public class AudioBook extends Book {
         return length * COST_PER_MINUTE;
     }
 
+    @Override
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public String getAuthor() {
+        return author;
+    }
+
+    @Override
+    public String getGenre() {
+        return genre;
     }
 
     public static double getTotalLength() {
@@ -53,7 +59,7 @@ public class AudioBook extends Book {
         return totalLength;
     }
 
-    public void writeFile(String title, String author, String genre, double cost, double length) {
+    public void writeFile() {
         BookManager bookManager = new BookManager();
         String book = String.join(",", "AUDIO", title, author, genre, String.valueOf(cost), String.valueOf(length));
         bookManager.writeToFile(book);
@@ -75,17 +81,38 @@ public class AudioBook extends Book {
         // Get the last three books with subList(size of array - 3, size of array)
         List<String> lastThreeBooks = audioBooks.subList(audioBooks.size() -3, audioBooks.size());
         System.out.println("---------------------------------");
-        System.out.println("[The last three printed books are]: ");
+        System.out.println("[The last three audiobooks are]: ");
         for (String loggedBook : lastThreeBooks) {
             String[] parts = loggedBook.split(",");
             String detail = "[Title]: " + parts[1].trim() + "\n" +
                     "[Author]: " + parts[2].trim() + "\n" +
                     "[Genre]: " + parts[3].trim() + "\n" +
-                    "[Length]: " + parts[4].trim() + "\n" +
-                    "[Cost]: $" + parts[5].trim() + "\n";
+                    "[Cost]: " + parts[4].trim() + "\n" +
+                    "[Length]: $" + parts[5].trim() + "\n";
             System.out.println("---------------------------------");
             System.out.println(detail);
         }
+    }
+
+    public static String allAudioBooks() {
+        BookManager bookManager = new BookManager();
+        List<String> audioBooks = bookManager.getPrintedBooks();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("[All audiobooks]:\n");
+        sb.append("---------------------------------\n");
+
+        for (String loggedBook : audioBooks) {
+            String[] parts = loggedBook.split(",");
+            sb.append("[Title]: ").append(parts[1].trim()).append("\n")
+                    .append("[Author]: ").append(parts[2].trim()).append("\n")
+                    .append("[Genre]: ").append(parts[3].trim()).append("\n")
+                    .append("[Cost]: $").append(parts[4].trim()).append("\n")
+                    .append("[Length]: ").append(parts[5].trim()).append("\n")
+                    .append("---------------------------------\n");
+        }
+
+        return sb.toString();
     }
 
     public HashMap<String, Integer> numberOfBooksPerGenre() {

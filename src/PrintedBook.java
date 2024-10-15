@@ -11,9 +11,11 @@ public class PrintedBook extends Book {
     private static double totalPages;
 
     public PrintedBook(String title, String author, String genre, double cost, double pages) {
-        super();
+        super(title, author, genre, cost);
+        this.pages = pages;
+
         storeBookInfo(title, author, genre, cost);
-        setPages(pages);
+        writeFile();
 
     }
 
@@ -24,10 +26,26 @@ public class PrintedBook extends Book {
         this.cost = cost;
     }
 
-    // Setter for pages
-    public void setPages(double pages) {
-        this.pages = pages;
-        writeFile(title, author, genre, cost, pages);
+    @Override
+    public double getCost() {
+        double COST_PER_PAGE = 10;
+        System.out.println("The cost of " + getTitle() + "is " + pages * COST_PER_PAGE);
+        return (pages * COST_PER_PAGE);
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public String getAuthor() {
+        return author;
+    }
+
+    @Override
+    public String getGenre() {
+        return genre;
     }
 
     public static double getTotalPages() {
@@ -42,18 +60,7 @@ public class PrintedBook extends Book {
         return totalPages;
     }
 
-    @Override
-    public double getCost() {
-        double COST_PER_PAGE = 10;
-        System.out.println("The cost of " + getTitle() + "is " + pages * COST_PER_PAGE);
-        return (pages * COST_PER_PAGE);
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void writeFile(String title, String author, String genre, double cost, double pages) {
+    public void writeFile() {
         BookManager bookManager = new BookManager();
         String book = String.join(",", "PRINTED", title, author, genre, String.valueOf(cost), String.valueOf(pages));
         bookManager.writeToFile(book);
