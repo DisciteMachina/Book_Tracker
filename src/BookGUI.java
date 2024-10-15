@@ -37,7 +37,7 @@ class BookGUI extends JFrame {
         buttonPanel.add(addBook);
 
         addBook.addActionListener(e -> {
-            String bookDetails = JOptionPane.showInputDialog(null, "Enter book (type, title, author, genre, cost, pages/length)");
+            String bookDetails = JOptionPane.showInputDialog(null, "Enter book (type (printed/audio), title, author, genre, cost, pages/length)");
             if (bookDetails != null && !bookDetails.trim().isEmpty()) {
 
                 if (bookDetails.split(",")[0].equalsIgnoreCase("printed")) {
@@ -80,6 +80,49 @@ class BookGUI extends JFrame {
         dynamicButtonPanel.add(audioBooks);
         dynamicButtonPanel.add(allBooks);
         dynamicButtonPanel.add(backButton);
+
+        printedBooks.addActionListener(e -> {
+            // Clear the dynamic panel before adding new buttons
+            dynamicButtonPanel.removeAll();
+
+            // Buttons for printed book options
+            JButton averagePagesButton = new JButton("Average pages");
+            JButton lastThreeBooksButton = new JButton("Last 3 books");
+            JButton allPrintedBooksButton = new JButton("All books");
+
+            // Set button sizes
+            averagePagesButton.setPreferredSize(new Dimension(150, 50));
+            lastThreeBooksButton.setPreferredSize(new Dimension(150, 50));
+            allPrintedBooksButton.setPreferredSize(new Dimension(150, 50));
+
+            // Add buttons to dynamic panel
+            dynamicButtonPanel.add(averagePagesButton);
+            dynamicButtonPanel.add(lastThreeBooksButton);
+            dynamicButtonPanel.add(allPrintedBooksButton);
+
+            // Action listeners for new buttons
+            averagePagesButton.addActionListener(a -> {
+                // Logic to calculate and show average pages
+                JOptionPane.showMessageDialog(null, "Average pages: " + PrintedBook.averagePages());
+            });
+
+            lastThreeBooksButton.addActionListener(a -> {
+                // Logic to show the last 3 printed books
+                JOptionPane.showMessageDialog(null, PrintedBook.lastThreePrintedBooks());
+            });
+
+            allPrintedBooksButton.addActionListener(a -> {
+                // Logic to show all printed books
+                JOptionPane.showMessageDialog(null, "All printed books: ");
+            });
+
+            backButton.addActionListener(a -> cardLayout.show(cardPanel, "mainPanel"));
+
+            // Refresh the dynamic panel
+            dynamicButtonPanel.revalidate();
+            dynamicButtonPanel.repaint();
+        });
+
 
         // ADD DYNAMIC PANEL TO CARD LAYOUT
         cardPanel.add(dynamicButtonPanel, "dynamicPanel");

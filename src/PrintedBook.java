@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class PrintedBook extends Book {
@@ -30,6 +31,7 @@ public class PrintedBook extends Book {
     }
 
     public static double getTotalPages() {
+        totalPages = 0;
         BookManager bookManager = new BookManager();
         List<String> books = bookManager.getPrintedBooks();
 
@@ -57,16 +59,20 @@ public class PrintedBook extends Book {
         bookManager.writeToFile(book);
     }
 
-    public static double averagePages() {
+    public static int averagePages() {
         List<String> books = BookManager.readBooksFromFile(); // All the books
-        int count = 0;
-        for (int i = 0; i < books.size(); i++) {
-            count ++;
+        int count = books.size();
+
+        if (count == 0) {
+            return 0;
         }
-        return (getTotalPages() / count);
+
+        double totalPages = getTotalPages();
+        double average = totalPages / count;
+        return (int) average;
     }
 
-    public static void lastThreePrintedBooks() {
+    public static Object lastThreePrintedBooks() {
         BookManager bookManager = new BookManager();
         List<String> printedBooks = bookManager.getPrintedBooks();
 
@@ -84,6 +90,7 @@ public class PrintedBook extends Book {
             System.out.println("---------------------------------");
             System.out.println(detail);
         }
+        return null;
     }
 
     @Override
