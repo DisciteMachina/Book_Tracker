@@ -1,35 +1,24 @@
-import java.util.HashMap;
-import java.util.List;
-
 public class PrintedBook extends Book {
-    private String title;
-    private String author;
-    private String genre;
-    private double cost;
-    private double pages;
+    private final int pages;
+    private final String title;
+    private final String author;
+    private final String genre;
+    private final double cost;
 
-    private static double totalPages;
-
-    public PrintedBook(String title, String author, String genre, double cost, double pages) {
+    public PrintedBook(String title, String author, String genre, double cost, int pages) {
         super(title, author, genre, cost);
-        this.pages = pages;
-
-        storeBookInfo(title, author, genre, cost);
-        writeFile();
-
-    }
-
-    public void storeBookInfo(String title, String author, String genre, double cost) {
         this.title = title;
         this.author = author;
         this.genre = genre;
         this.cost = cost;
+        this.pages = pages;
+        books.add(this);
+        BookManager.writeToFile(this);
     }
 
     @Override
     public double getCost() {
-        double COST_PER_PAGE = 10;
-        System.out.println("The cost of " + getTitle() + "is " + pages * COST_PER_PAGE);
+        int COST_PER_PAGE = 10;
         return (pages * COST_PER_PAGE);
     }
 
@@ -40,114 +29,65 @@ public class PrintedBook extends Book {
 
     @Override
     public String getAuthor() {
-        return author;
+        return title;
     }
 
     @Override
     public String getGenre() {
-        return genre;
+        return title;
     }
 
-    public static double getTotalPages() {
-        totalPages = 0;
-        BookManager bookManager = new BookManager();
-        List<String> books = bookManager.getPrintedBooks();
-
-        for (String loggedBook : books) {
-            double bookPages = Double.parseDouble(loggedBook.split(",")[5].trim());
-            totalPages += bookPages;
-        }
-        return totalPages;
+    public int getPages() {
+        return pages;
     }
 
-    public void writeFile() {
-        BookManager bookManager = new BookManager();
-        String book = String.join(",", "PRINTED", title, author, genre, String.valueOf(cost), String.valueOf(pages));
-        bookManager.writeToFile(book);
+    // GET TOTAL COST
+    public double costOfAllPrintedBooks() {
+        double totalCost = 0;
+        for (Book book : books) {
+            if (book instanceof PrintedBook) {
+                totalCost += book.getCost();
+                System.out.println(book);
+            }
+        }
+        return totalCost;
     }
 
-    public static int averagePages() {
-        List<String> books = BookManager.readBooksFromFile(); // All the books
-        int count = books.size();
-
-        if (count == 0) {
-            return 0;
+    // GET AVERAGE PAGES
+    public static double getAveragePages() {
+        int totalBooks = 0;
+        int totalPages = 0;
+        // For each book in list books
+        for (Book book : books) {
+            // if book is a PrintedBook
+            if (book instanceof PrintedBook) {
+                totalBooks++;
+                totalPages += ((PrintedBook) book).pages;
+            }
         }
-
-        double totalPages = getTotalPages();
-        double average = totalPages / count;
-        return (int) average;
+        // If totalBooks > 0 (true) -> totalPages / totalBooks else (false) -> 0
+        return totalBooks > 0 ? (double) totalPages / totalBooks : 0;
     }
 
-    public static String lastThreePrintedBooks() {
-        BookManager bookManager = new BookManager();
-        List<String> printedBooks = bookManager.getPrintedBooks();
+    // GET LAST THREE PRINTED BOOKS
+    public static String getLastThreePrintedBooks() {
+        StringBuilder lastThreePrintedBooks = new StringBuilder("Last three printed books:\n");
+        int totalBooks = Book.books.size();
+        int start = Math.max(totalBooks - 3, 0);
 
-        if (printedBooks.size() < 3) {
-            return "Not enough printed books available.";
+
+        // Loop through books in reverse order
+        for (int i = start; i < totalBooks; i++) {
+            if (books.get(i) instanceof PrintedBook) {
+                lastThreePrintedBooks.append(books.get(i).toString());
+            }
         }
-
-        // Get the last three books
-        List<String> lastThreeBooks = printedBooks.subList(printedBooks.size() - 3, printedBooks.size());
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("[The last three printed books are]:\n");
-        sb.append("---------------------------------\n");
-
-        for (String loggedBook : lastThreeBooks) {
-            String[] parts = loggedBook.split(",");
-            sb.append("[Title]: ").append(parts[1].trim()).append("\n")
-                    .append("[Author]: ").append(parts[2].trim()).append("\n")
-                    .append("[Genre]: ").append(parts[3].trim()).append("\n")
-                    .append("[Cost]: $").append(parts[4].trim()).append("\n")
-                    .append("[Pages]: ").append(parts[5].trim()).append("\n")
-                    .append("---------------------------------\n");
-        }
-
-        return sb.toString();
-    }
-
-    public static String allPrintedBooks() {
-        BookManager bookManager = new BookManager();
-        List<String> printedBooks = bookManager.getPrintedBooks();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("[All printed books]:\n");
-        sb.append("---------------------------------\n");
-
-        for (String loggedBook : printedBooks) {
-            String[] parts = loggedBook.split(",");
-            sb.append("[Title]: ").append(parts[1].trim()).append("\n")
-                    .append("[Author]: ").append(parts[2].trim()).append("\n")
-                    .append("[Genre]: ").append(parts[3].trim()).append("\n")
-                    .append("[Cost]: $").append(parts[4].trim()).append("\n")
-                    .append("[Pages]: ").append(parts[5].trim()).append("\n")
-                    .append("---------------------------------\n");
-        }
-
-        return sb.toString();
-    }
-
-    public HashMap<String, Integer> numberOfBooksPerGenre() {
-        HashMap<String, Integer> genreCountMap = new HashMap<>();
-        BookManager bookManager = new BookManager();
-        List<String> printedBooks = bookManager.getPrintedBooks();
-
-        for (String book : printedBooks) {
-            String genre = book.split(",")[3].trim(); // Get the genre from the book data
-            genreCountMap.put(genre, genreCountMap.getOrDefault(genre, 0) + 1);
-        }
-
-        return genreCountMap;
+        return lastThreePrintedBooks.toString();
     }
 
     @Override
     public String toString() {
-        return "[PRINTED BOOK]" + '\n' +
-                "[title]: " + title + '\n' +
-                "[author]: " + author + '\n' +
-                "[genre]: " + genre + '\n' +
-                "[cost]: $" + cost + '\n' +
-                "[pages]: " + pages + '\n';
+        return "PRINTED, " + title + ", " + author + ", " + genre + ", " + cost;
     }
+
 }
