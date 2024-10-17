@@ -42,14 +42,14 @@ class BookGUI extends JFrame {
 
                 if (bookDetails.split(",")[0].equalsIgnoreCase("printed")) {
                     String[] parts = bookDetails.split(",");
-                    new PrintedBook(parts[1].trim(), parts[2].trim(), parts[3].trim(),
-                            Double.parseDouble(parts[4].trim()), Double.parseDouble(parts[5].trim()));
+                    PrintedBook printedBook = new PrintedBook(parts[1].trim(), parts[2].trim(), parts[3].trim(),
+                            Double.parseDouble(parts[4].trim()), Integer.parseInt(parts[5].trim()));
                     JOptionPane.showMessageDialog(null, "Printed Book added: " + parts[1].trim());
 
                 } else if (bookDetails.split(",")[0].equalsIgnoreCase("audio")) {
                     String[] parts = bookDetails.split(",");
-                    new AudioBook(parts[1].trim(), parts[2].trim(), parts[3].trim(),
-                            Double.parseDouble(parts[4].trim()), Double.parseDouble(parts[5].trim()));
+                    AudioBook audioBook = new AudioBook(parts[1].trim(), parts[2].trim(), parts[3].trim(),
+                            Double.parseDouble(parts[4].trim()), Integer.parseInt(parts[5].trim()));
                     JOptionPane.showMessageDialog(null, "AudioBook added: " + parts[1].trim());
 
                 } else {
@@ -76,11 +76,31 @@ class BookGUI extends JFrame {
         allBooks.setPreferredSize(new Dimension(150, 50));
         backButton.setPreferredSize(new Dimension(150, 50));
 
+        // Add options to the dynamic panel
         dynamicButtonPanel.add(printedBooks);
         dynamicButtonPanel.add(audioBooks);
         dynamicButtonPanel.add(allBooks);
         dynamicButtonPanel.add(backButton);
 
+        // ADD DYNAMIC PANEL TO CARD LAYOUT
+        cardPanel.add(dynamicButtonPanel, "dynamicPanel");
+
+        // VIEW BOOK ACTION
+        viewBook.addActionListener(e -> {
+            // Reset the dynamic panel by clearing and re-adding buttons
+            dynamicButtonPanel.removeAll();
+            dynamicButtonPanel.add(printedBooks);
+            dynamicButtonPanel.add(audioBooks);
+            dynamicButtonPanel.add(allBooks);
+            dynamicButtonPanel.add(backButton);
+            dynamicButtonPanel.revalidate();
+            dynamicButtonPanel.repaint();
+
+            // Show the dynamic view panel
+            cardLayout.show(cardPanel, "dynamicPanel");
+        });
+
+        // PRINTED BOOKS BUTTON ACTION
         printedBooks.addActionListener(e -> {
             // Clear the dynamic panel before adding new buttons
             dynamicButtonPanel.removeAll();
@@ -88,28 +108,24 @@ class BookGUI extends JFrame {
             // Buttons for printed book options
             JButton averagePagesButton = new JButton("Average pages");
             JButton lastThreeBooksButton = new JButton("Last 3 books");
-            JButton allPrintedBooksButton = new JButton("All books");
 
             // Set button sizes
             averagePagesButton.setPreferredSize(new Dimension(150, 50));
             lastThreeBooksButton.setPreferredSize(new Dimension(150, 50));
-            allPrintedBooksButton.setPreferredSize(new Dimension(150, 50));
 
             // Add buttons to dynamic panel
             dynamicButtonPanel.add(averagePagesButton);
             dynamicButtonPanel.add(lastThreeBooksButton);
-            dynamicButtonPanel.add(allPrintedBooksButton);
+            dynamicButtonPanel.add(backButton);
 
-            // AVERAGE PAGES
+            // AVERAGE PAGES ACTION
             averagePagesButton.addActionListener(a -> {
-                JOptionPane.showMessageDialog(null, "Average pages: " + PrintedBook.averagePages());
+                JOptionPane.showMessageDialog(null, "Average pages: " + PrintedBook.getAveragePages());
             });
 
-            // LAST THREE BOOKS
+            // LAST THREE BOOKS ACTION
             lastThreeBooksButton.addActionListener(a -> {
-                String lastThreeBooks = PrintedBook.lastThreePrintedBooks();
-
-                JTextArea textArea = new JTextArea(lastThreeBooks);
+                JTextArea textArea = new JTextArea(PrintedBook.getLastThreePrintedBooks());
                 textArea.setEditable(false);
                 textArea.setLineWrap(true);
                 textArea.setWrapStyleWord(true);
@@ -119,35 +135,13 @@ class BookGUI extends JFrame {
 
                 JOptionPane.showMessageDialog(null, scrollPane, "All Printed Books", JOptionPane.INFORMATION_MESSAGE);
             });
-
-            // ALL PRINTED BOOKS
-            allPrintedBooksButton.addActionListener(a -> {
-                String allBooksInfo = PrintedBook.allPrintedBooks();
-
-                JTextArea textArea = new JTextArea(allBooksInfo);
-                textArea.setEditable(false);
-                textArea.setLineWrap(true);
-                textArea.setWrapStyleWord(true);
-
-                JScrollPane scrollPane = new JScrollPane(textArea);
-                scrollPane.setPreferredSize(new Dimension(400, 300)); // Set preferred size
-
-                JOptionPane.showMessageDialog(null, scrollPane, "All Printed Books", JOptionPane.INFORMATION_MESSAGE);
-            });
-
-
-            backButton.addActionListener(a -> cardLayout.show(cardPanel, "mainPanel"));
 
             dynamicButtonPanel.revalidate();
             dynamicButtonPanel.repaint();
         });
 
-
-        // ADD DYNAMIC PANEL TO CARD LAYOUT
-        cardPanel.add(dynamicButtonPanel, "dynamicPanel");
-
-        // VIEW BOOK ACTION
-        viewBook.addActionListener(e -> cardLayout.show(cardPanel, "dynamicPanel"));
+        // BACK BUTTON ACTION
+        backButton.addActionListener(e -> cardLayout.show(cardPanel, "mainPanel"));
 
         // DELETE BOOK BUTTON
         deleteBook.setPreferredSize(new Dimension(150, 50));
@@ -156,14 +150,9 @@ class BookGUI extends JFrame {
         // DELETE BUTTON ACTION
         deleteBook.addActionListener(e -> JOptionPane.showMessageDialog(null, "Button Clicked!"));
 
-        // BACK BUTTON ACTION
-        backButton.addActionListener(e -> cardLayout.show(cardPanel, "mainPanel"));
-
         add(title, BorderLayout.NORTH);
         add(cardPanel, BorderLayout.CENTER);
 
         setVisible(true);
     }
 }
-
-

@@ -1,15 +1,9 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BookManager {
     static String FILE_NAME = "book_log.txt";
 
-    public BookManager() {
-        ensureFileExists();
-    }
-
-    private static void ensureFileExists() {
+    private void ensureFileExists() {
         File file = new File(FILE_NAME);
         if (!file.exists()) {
             try {
@@ -20,99 +14,58 @@ public class BookManager {
         }
     }
 
-    public void writeToFile(String book) {
-        if (!checkIfLogged(book)) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
-                writer.write(book);
-                writer.newLine();
-            } catch (IOException e) {
-                throw new RuntimeException("Error while writing the file", e);
-            }
-        }
-
-    }
-
-    public boolean checkIfLogged(String book) {
-        List<String> books = readBooksFromFile();
-        String[] bookParts = book.split(",");
-
-        if (bookParts.length < 2) {
-            throw new IllegalArgumentException("Invalid book format: " + book);
-        }
-
-        String title = bookParts[1];
-
-        for (String loggedBook : books) {
-
-            String loggedTitle = loggedBook.split(",")[1].trim();
-            if (loggedTitle.equalsIgnoreCase(title)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static List<String> readBooksFromFile() {
-        List<String> books = new ArrayList<>();
+    public void loadBooks() {
         ensureFileExists();
-
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                books.add(line);
+                String[] parts = line.split(",");
+                if (parts.length == 6) {
+                    String type = parts[0].trim();
+                    String title = parts[1].trim();
+                    String author = parts[2].trim();
+                    String genre = parts[3].trim();
+                    double cost = Double.parseDouble(parts[4].trim());
+                    if (type.equalsIgnoreCase("PRINTED")) {
+                        int pages = Integer.parseInt(parts[5].trim());
+                        PrintedBook printedBook = new PrintedBook(title, author, genre, cost, pages);
+                    } else if (type.equalsIgnoreCase("AUDIO")) {
+                        int length = Integer.parseInt(parts[5].trim());
+                        AudioBook audioBook = new AudioBook(title, author, genre, cost, length);
+                    }
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return books;
     }
 
-    public static List<Book> loadBooksFromFile() {
-        List<String> books = readBooksFromFile();
-        List<Book> bookList = new ArrayList<>();
+    public static void writeToFile(Book book) {
+        String title = book.getTitle();
+        boolean isLogged = false;
 
-        for (String book : books) {
-            String[] loggedBook = book.split(",");
-            String type = loggedBook[0].trim();
-            String title = loggedBook[1].trim();
-            String author = loggedBook[2].trim();
-            String genre = loggedBook[3].trim();
-            double cost = Double.parseDouble(loggedBook[4].trim());
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(", ");
+                if (parts[1].trim().equalsIgnoreCase(title)) {
+                    isLogged = true;
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-            if (type.equalsIgnoreCase("PRINTED")) {
-                double pages = Double.parseDouble(loggedBook[5]);
-                bookList.add(new PrintedBook(title, author, genre, cost, pages));
-            } else if (type.equalsIgnoreCase("AUDIO")) {
-                double length = Double.parseDouble(loggedBook[5]);
-                bookList.add(new AudioBook(title, author, genre, cost, length));
+        if (!isLogged) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
+                writer.write(book.toString());
+                writer.newLine();
+                System.out.println("Book logged: " + book.getTitle());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
-        return bookList;
     }
 
-    public List<String> getPrintedBooks() {
-        List<String> books = readBooksFromFile();
-        List<String> printedBooks = new ArrayList<>();
-
-        for (String loggedBook : books) {
-            String type = loggedBook.split(",")[0].trim();
-            if (type.equalsIgnoreCase("PRINTED")) {
-                printedBooks.add(loggedBook);
-            }
-        }
-        return printedBooks;
-    }
-
-    public List<String> getAudioBooks() {
-        List<String> books = readBooksFromFile();
-        List<String> audioBooks = new ArrayList<>();
-
-        for (String loggedBook : books) {
-            String type = loggedBook.split(",")[0].trim();
-            if (type.equalsIgnoreCase("AUDIO")) {
-                audioBooks.add(loggedBook);
-            }
-        }
-        return audioBooks;
-    }
 }
