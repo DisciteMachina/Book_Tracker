@@ -71,15 +71,17 @@ public class PrintedBook extends Book {
 
     // GET LAST THREE PRINTED BOOKS
     public static String getLastThreePrintedBooks() {
-        StringBuilder lastThreePrintedBooks = new StringBuilder("Last three printed books:\n");
+        StringBuilder lastThreePrintedBooks = new StringBuilder("[Last three printed books]\n");
         int totalBooks = Book.books.size();
         int start = Math.max(totalBooks - 3, 0);
 
-
-        // Loop through books in reverse order
         for (int i = start; i < totalBooks; i++) {
             if (books.get(i) instanceof PrintedBook) {
+                lastThreePrintedBooks.append('\n');
+                lastThreePrintedBooks.append("[");
                 lastThreePrintedBooks.append(books.get(i).toString());
+                lastThreePrintedBooks.append("]");
+                lastThreePrintedBooks.append('\n');
             }
         }
         return lastThreePrintedBooks.toString();
@@ -87,7 +89,7 @@ public class PrintedBook extends Book {
 
     @Override
     public String toString() {
-        return "PRINTED, " + title + ", " + author + ", " + genre + ", " + cost;
+        return "PRINTED, " + title + ", " + author + ", " + genre + ", " + cost + ", " + pages;
     }
 
 }

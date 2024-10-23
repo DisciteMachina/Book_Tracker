@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 
 public class BookManager {
     static String FILE_NAME = "book_log.txt";
@@ -47,7 +48,7 @@ public class BookManager {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(", ");
+                String[] parts = line.split(",");
                 if (parts[1].trim().equalsIgnoreCase(title)) {
                     isLogged = true;
                     break;

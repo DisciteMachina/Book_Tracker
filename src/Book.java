@@ -6,6 +6,7 @@ public abstract class Book implements BookInterface{
     private final String author;
     private final String genre;
     private final double cost;
+
     protected static List<Book> books = new ArrayList<>();
     public Book(String title, String author, String genre, double cost) {
         this.title = title;

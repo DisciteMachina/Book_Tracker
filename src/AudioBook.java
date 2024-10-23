@@ -2,13 +2,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AudioBook extends Book {
-    private int length;
+    private final double length;
     private final String title;
     private final String author;
     private final String genre;
     private final double cost;
 
-    public AudioBook(String title, String author, String genre, double cost, int length) {
+    public AudioBook(String title, String author, String genre, double cost, double length) {
         super(title, author, genre, cost);
         this.title = title;
         this.author = author;
@@ -38,7 +38,7 @@ public class AudioBook extends Book {
         return title;
     }
 
-    public int getLength() {
+    public double getLength() {
         return length;
     }
 

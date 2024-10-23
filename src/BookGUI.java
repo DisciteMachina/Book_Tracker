@@ -131,9 +131,9 @@ class BookGUI extends JFrame {
                 textArea.setWrapStyleWord(true);
 
                 JScrollPane scrollPane = new JScrollPane(textArea);
-                scrollPane.setPreferredSize(new Dimension(400, 300)); // Set preferred size
+                scrollPane.setPreferredSize(new Dimension(500, 300)); // Set preferred size
 
-                JOptionPane.showMessageDialog(null, scrollPane, "All Printed Books", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, scrollPane, "Last Three Printed Books", JOptionPane.INFORMATION_MESSAGE);
             });
 
             dynamicButtonPanel.revalidate();
