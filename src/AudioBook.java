@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class AudioBook extends Book {
         this.genre = genre;
         this.cost = cost;
         this.length = length;
+        books.add(this);
+        BookManager.writeToFile(this);
     }
 
     @Override
@@ -29,44 +32,58 @@ public class AudioBook extends Book {
     }
 
     @Override
-    public String getAuthor() {
-        return title;
-    }
-
-    @Override
     public String getGenre() {
-        return title;
+        return genre;
     }
 
     public double getLength() {
         return length;
     }
 
-    public double getAverageLength() {
+    // GET TOTAL COST
+    public static double costOfAllAudioBooks() {
+        double totalCost = 0;
+        for (Book book : books) {
+            if (book instanceof AudioBook) {
+                totalCost += book.getCost();
+            }
+        }
+        return totalCost;
+    }
+
+    public static double getAverageLength() {
         int totalBooks = 0;
-        int totalLength = 0;
+        double totalLength = 0;
         for (Book book : books) {
             if (book instanceof AudioBook) {
                 totalBooks++;
                 totalLength += ((AudioBook) book).length;
             }
         }
-        return totalBooks > 0 ? (double) totalLength / totalBooks : 0;
+        return totalBooks > 0 ? totalLength / totalBooks : 0;
     }
 
     // GET LAST THREE AUDIOBOOKS
-    public static List<Book> lastThreeAudioBooks() {
-        List<Book> audioBooks = new ArrayList<>();
-        for (Book book : books) {
-            if (book instanceof PrintedBook) {
-                audioBooks.add(book);
+    public static String getLastThreeAudioBooks() {
+        StringBuilder lastThreeAudioBooks = new StringBuilder("[Last three audiobooks]\n");
+        int totalBooks = Book.books.size();
+        int start = Math.max(totalBooks - 3, 0);
+
+        for (int i = start; i < totalBooks; i++) {
+            if (books.get(i) instanceof AudioBook) {
+                lastThreeAudioBooks.append('\n');
+                lastThreeAudioBooks.append("[");
+                lastThreeAudioBooks.append(books.get(i).toString());
+                lastThreeAudioBooks.append("]");
+                lastThreeAudioBooks.append('\n');
             }
         }
-        return audioBooks.subList(audioBooks.size() - 3, audioBooks.size());
+        return lastThreeAudioBooks.toString();
     }
 
     @Override
     public String toString() {
-        return "AUDIO, " + title + ", " + author + ", " + genre + ", " + cost;
+        DecimalFormat df = new DecimalFormat("#.00");
+        return "AUDIO, " + title + ", " + author + ", " + genre + ", " + df.format(cost) + ", " + length;
     }
 }

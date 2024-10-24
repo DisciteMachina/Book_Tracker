@@ -5,9 +5,5 @@ public class Main {
 
         BookGUI window = new BookGUI();
         window.setVisible(true);
-
-        for (Book book : Book.books) {
-            System.out.println(book);
-        }
     }
 }

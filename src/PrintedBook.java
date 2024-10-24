@@ -1,3 +1,5 @@
+import java.text.DecimalFormat;
+
 public class PrintedBook extends Book {
     private final int pages;
     private final String title;
@@ -28,13 +30,8 @@ public class PrintedBook extends Book {
     }
 
     @Override
-    public String getAuthor() {
-        return title;
-    }
-
-    @Override
     public String getGenre() {
-        return title;
+        return genre;
     }
 
     public int getPages() {
@@ -42,12 +39,11 @@ public class PrintedBook extends Book {
     }
 
     // GET TOTAL COST
-    public double costOfAllPrintedBooks() {
+    public static double costOfAllPrintedBooks() {
         double totalCost = 0;
         for (Book book : books) {
             if (book instanceof PrintedBook) {
                 totalCost += book.getCost();
-                System.out.println(book);
             }
         }
         return totalCost;
@@ -89,7 +85,8 @@ public class PrintedBook extends Book {
 
     @Override
     public String toString() {
-        return "PRINTED, " + title + ", " + author + ", " + genre + ", " + cost + ", " + pages;
+        DecimalFormat df = new DecimalFormat("#.00");
+        return "PRINTED, " + title + ", " + author + ", " + genre + ", " + df.format(cost) + ", " + pages;
     }
 
 }

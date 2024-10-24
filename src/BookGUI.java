@@ -68,18 +68,18 @@ class BookGUI extends JFrame {
         JPanel dynamicButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         JButton printedBooks = new JButton("Printed books");
         JButton audioBooks = new JButton("Audiobooks");
-        JButton allBooks = new JButton("All books");
+        JButton specialActions = new JButton("Special Actions");
         JButton backButton = new JButton("Back");
 
         printedBooks.setPreferredSize(new Dimension(150, 50));
         audioBooks.setPreferredSize(new Dimension(150, 50));
-        allBooks.setPreferredSize(new Dimension(150, 50));
+        specialActions.setPreferredSize(new Dimension(150, 50));
         backButton.setPreferredSize(new Dimension(150, 50));
 
         // Add options to the dynamic panel
         dynamicButtonPanel.add(printedBooks);
         dynamicButtonPanel.add(audioBooks);
-        dynamicButtonPanel.add(allBooks);
+        dynamicButtonPanel.add(specialActions);
         dynamicButtonPanel.add(backButton);
 
         // ADD DYNAMIC PANEL TO CARD LAYOUT
@@ -91,7 +91,7 @@ class BookGUI extends JFrame {
             dynamicButtonPanel.removeAll();
             dynamicButtonPanel.add(printedBooks);
             dynamicButtonPanel.add(audioBooks);
-            dynamicButtonPanel.add(allBooks);
+            dynamicButtonPanel.add(specialActions);
             dynamicButtonPanel.add(backButton);
             dynamicButtonPanel.revalidate();
             dynamicButtonPanel.repaint();
@@ -99,6 +99,56 @@ class BookGUI extends JFrame {
             // Show the dynamic view panel
             cardLayout.show(cardPanel, "dynamicPanel");
         });
+
+        // SPECIAL ACTIONS BUTTON ACTION
+        specialActions.addActionListener(e -> {
+            // Clear the dynamic panel before adding new buttons
+            dynamicButtonPanel.removeAll();
+
+            // Buttons for special actions options
+            JButton lastSixBooksButton = new JButton("Last six books");
+            JButton genreCountButton = new JButton("Genre count");
+            JButton totalCostOfAllBooks = new JButton("Total cost of all books");
+
+            // Set button sizes
+            lastSixBooksButton.setPreferredSize(new Dimension(150, 50));
+            genreCountButton.setPreferredSize(new Dimension(150, 50));
+            totalCostOfAllBooks.setPreferredSize(new Dimension(250, 50));
+
+            // Add buttons to dynamic panel
+            dynamicButtonPanel.add(lastSixBooksButton);
+            dynamicButtonPanel.add(genreCountButton);
+            dynamicButtonPanel.add(totalCostOfAllBooks);
+            dynamicButtonPanel.add(backButton);
+
+            // GENRE COUNT BUTTON
+            genreCountButton.addActionListener(a -> {
+                JOptionPane.showMessageDialog(null, "Genre count:" + Book.getNumberOfBooksByGenre());
+            });
+
+            // LAST SIX BOOKS BUTTON
+            lastSixBooksButton.addActionListener(a -> {
+                BookApp bookApp = new BookApp();
+                JTextArea textArea = new JTextArea((bookApp.displayLastSixBooks()));
+                textArea.setEditable(false);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setPreferredSize(new Dimension(500, 300)); // Set preferred size
+
+                JOptionPane.showMessageDialog(null, scrollPane, "Last six books", JOptionPane.INFORMATION_MESSAGE);
+            });
+
+            // COST OF ALL BOOKS BUTTON
+            totalCostOfAllBooks.addActionListener(a -> {
+                JOptionPane.showMessageDialog(null, "Total cost: $" + Book.getTotalCost());
+            });
+
+            dynamicButtonPanel.revalidate();
+            dynamicButtonPanel.repaint();
+        });
+
 
         // PRINTED BOOKS BUTTON ACTION
         printedBooks.addActionListener(e -> {
@@ -108,14 +158,17 @@ class BookGUI extends JFrame {
             // Buttons for printed book options
             JButton averagePagesButton = new JButton("Average pages");
             JButton lastThreeBooksButton = new JButton("Last 3 books");
+            JButton costOfAllPrintedBooksButton = new JButton("Total cost");
 
             // Set button sizes
             averagePagesButton.setPreferredSize(new Dimension(150, 50));
             lastThreeBooksButton.setPreferredSize(new Dimension(150, 50));
+            costOfAllPrintedBooksButton.setPreferredSize(new Dimension(150, 50));
 
             // Add buttons to dynamic panel
             dynamicButtonPanel.add(averagePagesButton);
             dynamicButtonPanel.add(lastThreeBooksButton);
+            dynamicButtonPanel.add(costOfAllPrintedBooksButton);
             dynamicButtonPanel.add(backButton);
 
             // AVERAGE PAGES ACTION
@@ -134,6 +187,59 @@ class BookGUI extends JFrame {
                 scrollPane.setPreferredSize(new Dimension(500, 300)); // Set preferred size
 
                 JOptionPane.showMessageDialog(null, scrollPane, "Last Three Printed Books", JOptionPane.INFORMATION_MESSAGE);
+            });
+
+            // COST OF ALL PRINTED BOOKS BUTTON
+            costOfAllPrintedBooksButton.addActionListener(a -> {
+                JOptionPane.showMessageDialog(null, "Total cost: $" + PrintedBook.costOfAllPrintedBooks());
+            });
+
+            dynamicButtonPanel.revalidate();
+            dynamicButtonPanel.repaint();
+        });
+
+        // AUDIO BOOKS ACTION BUTTON
+        audioBooks.addActionListener(e -> {
+            // Clear the dynamic panel before adding new buttons
+            dynamicButtonPanel.removeAll();
+
+            // Buttons for audio book options
+            JButton averageLengthButton = new JButton("Average length");
+            JButton lastThreeAudioBooksButton = new JButton("Last 3 books");
+            JButton costOfAllAudioBooksButton = new JButton("Total cost");
+
+            // Set button sizes
+            averageLengthButton.setPreferredSize(new Dimension(150, 50));
+            lastThreeAudioBooksButton.setPreferredSize(new Dimension(150, 50));
+            costOfAllAudioBooksButton.setPreferredSize(new Dimension(150, 50));
+
+            // Add buttons to dynamic panel
+            dynamicButtonPanel.add(averageLengthButton);
+            dynamicButtonPanel.add(lastThreeAudioBooksButton);
+            dynamicButtonPanel.add(costOfAllAudioBooksButton);
+            dynamicButtonPanel.add(backButton);
+
+            // AVERAGE LENGTH ACTION
+            averageLengthButton.addActionListener(a -> {
+                JOptionPane.showMessageDialog(null, "Average length: " + AudioBook.getAverageLength());
+            });
+
+            // LAST THREE AUDIO BOOKS ACTION
+            lastThreeAudioBooksButton.addActionListener(a -> {
+                JTextArea textArea = new JTextArea(AudioBook.getLastThreeAudioBooks());
+                textArea.setEditable(false);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setPreferredSize(new Dimension(500, 300)); // Set preferred size
+
+                JOptionPane.showMessageDialog(null, scrollPane, "Last three audioBooks", JOptionPane.INFORMATION_MESSAGE);
+            });
+
+            // COST OF ALL AUDIO BOOKS ACTION
+            costOfAllAudioBooksButton.addActionListener(a -> {
+                JOptionPane.showMessageDialog(null, "Total cost: $" + AudioBook.costOfAllAudioBooks());
             });
 
             dynamicButtonPanel.revalidate();

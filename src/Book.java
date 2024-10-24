@@ -1,13 +1,11 @@
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.HashMap;
 public abstract class Book implements BookInterface{
-    private final String title;
-    private final String author;
-    private final String genre;
-    private final double cost;
+    protected String title;
+    protected String author;
+    protected String genre;
+    protected double cost;
 
-    protected static List<Book> books = new ArrayList<>();
+
     public Book(String title, String author, String genre, double cost) {
         this.title = title;
         this.author = author;
@@ -17,12 +15,9 @@ public abstract class Book implements BookInterface{
 
     public abstract double getCost();
     public abstract String getTitle();
-    public abstract String getAuthor();
     public abstract String getGenre();
 
-
-    @Override
-    public double getTotalCost() {
+    public static double getTotalCost() {
         double totalCost = 0;
         for (Book book : books) {
             totalCost += book.getCost();
@@ -30,16 +25,11 @@ public abstract class Book implements BookInterface{
         return totalCost;
     }
 
-    @Override
-    public void displayLastSixBooks() {
-        System.out.println("Last six books:");
-        for (int i = Math.max(0, books.size() - 6); i < books.size(); i++) {
-            System.out.println(books.get(i));
+    public static HashMap<String, Integer> getNumberOfBooksByGenre() {
+        HashMap<String, Integer> genreCount = new HashMap<>();
+        for (Book book : books) {
+            genreCount.put(book.getGenre(), genreCount.getOrDefault(book.getGenre(), 0) + 1);
         }
-    }
-
-    @Override
-    public int getNumberOfBooksByGenre() {
-        return 0;
+        return genreCount;
     }
 }

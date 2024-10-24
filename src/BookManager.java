@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Arrays;
 
 public class BookManager {
     static String FILE_NAME = "book_log.txt";
@@ -31,7 +30,7 @@ public class BookManager {
                         int pages = Integer.parseInt(parts[5].trim());
                         PrintedBook printedBook = new PrintedBook(title, author, genre, cost, pages);
                     } else if (type.equalsIgnoreCase("AUDIO")) {
-                        int length = Integer.parseInt(parts[5].trim());
+                        double length = Double.parseDouble(parts[5].trim());
                         AudioBook audioBook = new AudioBook(title, author, genre, cost, length);
                     }
                 }
@@ -67,6 +66,10 @@ public class BookManager {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public static void deleteBook(String title) {
+        // Use title to check for match in book_log and delete matches
     }
 
 }
