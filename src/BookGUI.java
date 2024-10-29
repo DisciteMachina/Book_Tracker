@@ -2,8 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 
 class BookGUI extends JFrame {
-    final int WIDTH = 700;
-    final int HEIGHT = 400;
+    final int WIDTH = 300;
+    final int HEIGHT = 350;
 
     public BookGUI() {
         JButton addBook = new JButton("Add Book");
@@ -254,7 +254,10 @@ class BookGUI extends JFrame {
         buttonPanel.add(deleteBook);
 
         // DELETE BUTTON ACTION
-        deleteBook.addActionListener(e -> JOptionPane.showMessageDialog(null, "Button Clicked!"));
+        deleteBook.addActionListener(e -> {
+            String bookTitle = JOptionPane.showInputDialog(null, "Enter the title of the book you want to delete.");
+            BookManager.deleteBook(bookTitle);
+        });
 
         add(title, BorderLayout.NORTH);
         add(cardPanel, BorderLayout.CENTER);

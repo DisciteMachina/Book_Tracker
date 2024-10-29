@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 
 public class BookManager {
     static String FILE_NAME = "book_log.txt";
@@ -68,8 +69,30 @@ public class BookManager {
         }
     }
 
-    public static void deleteBook(String title) {
-        // Use title to check for match in book_log and delete matches
+    public static void deleteBook(String bookTitle) {
+        List<String> linesToKeep = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String title = parts[1].trim();
+
+                if ((!title.equalsIgnoreCase(bookTitle))) {
+                    linesToKeep.add(line);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
+            for (String line : linesToKeep) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
