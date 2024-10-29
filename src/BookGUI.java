@@ -55,8 +55,6 @@ class BookGUI extends JFrame {
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid book type.");
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "No input provided.");
             }
         });
 
